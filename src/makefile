@@ -12,4 +12,4 @@ utils.o: utils.c utils.h
 	gcc -ansi -Wall -pedantic -c utils.c utils.h
 
 clean:
-	rm *.o *~ assembler
+	rm *.o *.gch *~ assembler
