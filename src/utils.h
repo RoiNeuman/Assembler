@@ -1,6 +1,12 @@
 #ifndef ASSEMBLER_UTILS_H
 #define ASSEMBLER_UTILS_H
 
+/* Represent a boolean */
+typedef enum Boolean {
+    false,
+    true
+} Boolean;
+
 /* Convert decimal number to binary number */
 int decimalToBinary(int number);
 
