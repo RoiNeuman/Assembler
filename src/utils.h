@@ -19,4 +19,7 @@ int mozarToBinary(char *number);
 /* Convert binary number to mozar number */
 char *binaryToMozar(int number);
 
+/* Strings concatenation */
+char *stringConcat(const char *str1, const char *str2);
+
 #endif

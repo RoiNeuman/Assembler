@@ -1,3 +1,5 @@
+#include <string.h>
+#include <stdlib.h>
 #include "utils.h"
 
 /* Convert decimal number to binary number */
@@ -36,4 +38,19 @@ int mozarToBinary(char *number)
 char *binaryToMozar(int number)
 {
 
+}
+
+char *stringConcat(const char *str1, const char *str2)
+{
+    const size_t len1 = strlen(str1);
+    const size_t len2 = strlen(str2);
+    char *concat;
+
+    /* Allocating the two strings length +1 for \0 */
+    concat = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+    if (concat == NULL) return NULL;
+
+    strcpy(concat, str1);
+    strcat(concat, str2);
+    return concat;
 }
