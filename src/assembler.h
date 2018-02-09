@@ -21,10 +21,4 @@ typedef enum Opcode {
     stop /* Stop the program */
 } Opcode;
 
-void checkFile(char *argv);
-
-void parseFile(char *argv);
-
-void createResultFile();
-
 #endif
