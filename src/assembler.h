@@ -1,6 +1,8 @@
 #ifndef ASSEMBLER_ASSEMBLER_H
 #define ASSEMBLER_ASSEMBLER_H
 
+#define AS_EXTENSION ".as"
+
 /* Operation code */
 typedef enum Opcode {
     mov, /* Copy one operand to another */

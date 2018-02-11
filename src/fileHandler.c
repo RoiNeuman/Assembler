@@ -1,21 +1,18 @@
-#include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include "fileHandler.h"
-#include "utils.h"
 
-Error checkFile(const char *pFileName)
+Error checkFile(String pFileName)
 {
-    char *pFullName;
-
-    /* Adds .as extension to the file name */
-    pFullName = stringConcat(pFileName, AS_EXTENSION);
-    if (pFullName == NULL) return outOfMemory;
-
-    /* Check file name's extension (.as) , check file exist */
-    if (access(pFullName, F_OK) != -1) {
-        free(pFullName);
+    /* Check if the file exists */
+    if (pFileName != NULL && access(pFileName, F_OK) != -1) {
         return none;
     }
-    free(pFullName);
     return fileNotExist;
+}
+
+/* Adds extension to the file name */
+String addFileExtension(String pName, String pExtension)
+{
+    return stringConcat(pName, pExtension);
 }

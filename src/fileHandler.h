@@ -1,10 +1,11 @@
 #ifndef ASSEMBLER_FILEHANDLER_H
 #define ASSEMBLER_FILEHANDLER_H
 
+#include "utils.h"
 #include "errors.h"
 
-#define AS_EXTENSION ".as"
+Error checkFile(String argv);
 
-Error checkFile(const char *argv);
+String addFileExtension(String pName, String pExtension);
 
 #endif

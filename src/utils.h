@@ -7,6 +7,8 @@ typedef enum Boolean {
     true
 } Boolean;
 
+typedef char *String;
+
 /* Convert decimal number to binary number */
 int decimalToBinary(int number);
 
@@ -14,12 +16,12 @@ int decimalToBinary(int number);
 int binaryToDecimal(int number);
 
 /* Convert mozar number to binary number */
-int mozarToBinary(char *number);
+int mozarToBinary(String number);
 
 /* Convert binary number to mozar number */
-char *binaryToMozar(int number);
+String binaryToMozar(int number);
 
 /* Strings concatenation */
-char *stringConcat(const char *str1, const char *str2);
+String stringConcat(String str1, String str2);
 
 #endif
