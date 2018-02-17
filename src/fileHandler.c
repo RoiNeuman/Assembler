@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "fileHandler.h"
 
-Error checkFile(String pFileName)
+Error checkFile(char *pFileName)
 {
     /* Check if the file exists */
     if (pFileName != NULL && access(pFileName, F_OK) != -1) {
@@ -12,7 +12,7 @@ Error checkFile(String pFileName)
 }
 
 /* Adds extension to the file name */
-String addFileExtension(String pName, String pExtension)
+char *addFileExtension(const char *pName, const char *pExtension)
 {
     return stringConcat(pName, pExtension);
 }

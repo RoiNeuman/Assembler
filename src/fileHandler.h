@@ -4,8 +4,8 @@
 #include "utils.h"
 #include "errors.h"
 
-Error checkFile(String argv);
+Error checkFile(char *argv);
 
-String addFileExtension(String pName, String pExtension);
+char *addFileExtension(const char *pName, const char *pExtension);
 
 #endif

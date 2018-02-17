@@ -29,25 +29,25 @@ int binaryToDecimal(int number)
 }
 
 /* Convert mozar number to binary number */
-int mozarToBinary(String number)
+int mozarToBinary(char *number)
 {
 
 }
 
 /* Convert binary number to mozar number */
-String binaryToMozar(int number)
+char *binaryToMozar(int number)
 {
 
 }
 
-String stringConcat(String str1, String str2)
+char *stringConcat(const char *str1, const char *str2)
 {
     const size_t len1 = strlen(str1);
     const size_t len2 = strlen(str2);
-    String concat;
+    char *concat;
 
     /* Allocating the two strings length +1 for \0 */
-    concat = (String)malloc(sizeof(char) * (len1 + len2 + 1));
+    concat = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
     if (concat == NULL) return NULL;
 
     strcpy(concat, str1);

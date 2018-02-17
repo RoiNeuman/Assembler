@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include "assembler.h"
 #include "errors.h"
-#include "utils.h"
 #include "fileHandler.h"
 
 int main(int argc, char *argv[])
 {
     int i;
-    String pFullName;
+    char *pFullName;
     Error error;
 
     for (i = 1; i < argc; ++i) {
