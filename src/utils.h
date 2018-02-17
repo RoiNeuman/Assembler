@@ -20,6 +20,7 @@ int mozarToBinary(char *number);
 char *binaryToMozar(int number);
 
 /* Strings concatenation */
+/* return new char pointer array with the length of both strings and with their content one after the other */
 char *stringConcat(const char *str1, const char *str2);
 
 #endif
