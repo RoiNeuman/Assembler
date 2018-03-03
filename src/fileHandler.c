@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include "fileHandler.h"
 
+/* Checks file availability */
 Error checkFile(char *pFileName)
 {
     /* Check if the file exists */
@@ -15,4 +16,18 @@ Error checkFile(char *pFileName)
 char *addFileExtension(const char *pName, const char *pExtension)
 {
     return stringConcat(pName, pExtension);
+}
+
+/* Checks availability and open an assembly file for reading */
+Error getAssemblyFile(char *fName, FILE *fp)
+{
+    char *pFullName;
+
+    pFullName = addFileExtension(fName, AS_EXTENSION);
+
+    if (pFullName == NULL) {
+        return outOfMemory;
+    }
+
+    error = checkFile(argv[i]);
 }

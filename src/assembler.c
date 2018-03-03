@@ -1,31 +1,46 @@
 #include <stdio.h>
 #include "assembler.h"
-#include "errors.h"
 #include "fileHandler.h"
 #include "memoryManager.h"
+
+Error runAssemblerOnFile(char *fName)
+{
+    Error error;
+    FILE *fp;
+    ParsedFile pParsed;
+
+    fp = NULL;
+    error = getAssemblyFile(fName, fp);
+
+    if (error != none) {
+        return error;
+    }
+
+    error = parseFile(fp, pParsed);
+
+    if (error != none) {
+        return error;
+    }
+
+    error = createResultFile(pParsed);
+
+    return error;
+}
 
 int main(int argc, char *argv[])
 {
     int i;
-    char *pFullName;
     Error error;
 
     for (i = 1; i < argc; ++i) {
-        pFullName = addFileExtension(argv[i], AS_EXTENSION);
-        if (pFullName == NULL) {
-            error = outOfMemory;
-        } else {
-            error = checkFile(argv[i]);
-        }
-        if (error == none) {
-            /* parseFile(argv[i]);
-            createResultFile(); */
-        } else {
+        /* Running the assembler of the file given by the argument */
+        error = runAssemblerOnFile(argv[i]);
+        if (error != none) {
+            /* Printing Errors */
             printError(error);
         }
         freeAll();
     }
-    freeAll();
 
     return 0;
 }

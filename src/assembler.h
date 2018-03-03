@@ -1,7 +1,7 @@
 #ifndef ASSEMBLER_ASSEMBLER_H
 #define ASSEMBLER_ASSEMBLER_H
 
-#define AS_EXTENSION ".as"
+#include "errors.h"
 
 /* Operation code */
 typedef enum Opcode {
@@ -22,5 +22,11 @@ typedef enum Opcode {
     rts, /* Return from subroutine */
     stop /* Stop the program */
 } Opcode;
+
+typedef  struct ParsedFile {
+
+} ParsedFile;
+
+Error runAssemblerOnFile(char *fName);
 
 #endif
