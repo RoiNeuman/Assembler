@@ -38,10 +38,14 @@ void printAllErrors()
     ErrorNode *pn;
     pn = head;
 
+    /* Running over the error list and printing all the logged errors */
     while (pn != NULL) {
         printError(pn->error, pn->msg);
         pn = pn->next;
     }
+
+    /* Clearing the error list (the memory will be free by the memoryManager) */
+    head = NULL;
 }
 
 /* Log a new error into the error list */

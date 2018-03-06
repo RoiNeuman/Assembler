@@ -9,7 +9,7 @@ void runAssemblerOnFile(char *fName)
     ParsedFile pParsed;
 
     fp = getAssemblyFile(fName);
-    parseFile(fp, pParsed);
+    pParsed = parseFile(fp);
     createResultFile(pParsed);
 }
 
