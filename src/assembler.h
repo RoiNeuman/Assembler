@@ -23,10 +23,13 @@ typedef enum Opcode {
     stop /* Stop the program */
 } Opcode;
 
+/* Parsed file type */
 typedef  struct ParsedFile {
+    char *fName;
 
 } ParsedFile;
 
+/* Run the assembler on a file */
 void runAssemblerOnFile(char *fName);
 
 #endif
