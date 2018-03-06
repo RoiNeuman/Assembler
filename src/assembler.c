@@ -2,6 +2,7 @@
 #include "assembler.h"
 #include "fileHandler.h"
 #include "memoryManager.h"
+#include "parser.h"
 
 /* Run the assembler on a file */
 void runAssemblerOnFile(char *fName)
@@ -10,7 +11,7 @@ void runAssemblerOnFile(char *fName)
     ParsedFile pParsed;
 
     fp = getAssemblyFile(fName);
-    pParsed = parseFile(fp);
+    pParsed = parseFile(fp, fName);
     closeFile(fp, fName);
     createResultFile(pParsed);
 }
