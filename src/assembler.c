@@ -3,6 +3,7 @@
 #include "fileHandler.h"
 #include "memoryManager.h"
 
+/* Run the assembler on a file */
 void runAssemblerOnFile(char *fName)
 {
     FILE *fp;
@@ -10,6 +11,7 @@ void runAssemblerOnFile(char *fName)
 
     fp = getAssemblyFile(fName);
     pParsed = parseFile(fp);
+    closeFile(fp, fName);
     createResultFile(pParsed);
 }
 

@@ -28,3 +28,11 @@ FILE *getAssemblyFile(char *fName)
 
     return fp;
 }
+
+/* Closing the given file */
+void closeFile(FILE *fp, char * fName)
+{
+    if (fclose(fp) != 0) {
+        logError(fileNotClose, fName);
+    }
+}

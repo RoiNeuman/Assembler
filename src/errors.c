@@ -26,6 +26,15 @@ void printError(Error e, const char *msg)
                 fprintf(stderr, "Error: file not available.\n");
             }
             break;
+        case fileNotClose:
+            if (msg != NULL) {
+                fprintf(stderr, "Error: fail to close file. ");
+                fprintf(stderr, msg);
+                fprintf(stderr, "\n");
+            } else {
+                fprintf(stderr, "Error: fail to close file.\n");
+            }
+            break;
         case none:
         default:
             break;
