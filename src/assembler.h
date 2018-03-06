@@ -27,6 +27,6 @@ typedef  struct ParsedFile {
 
 } ParsedFile;
 
-Error runAssemblerOnFile(char *fName);
+void runAssemblerOnFile(char *fName);
 
 #endif

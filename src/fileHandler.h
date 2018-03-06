@@ -5,14 +5,12 @@
 #include "errors.h"
 
 #define AS_EXTENSION ".as"
-
-/* Checks file availability */
-Error checkFile(char *argv);
+#define READ_MODE "r"
 
 /* Adds extension to the file name */
 char *addFileExtension(const char *pName, const char *pExtension);
 
 /* Checks availability and open an assembly file for reading */
-Error getAssemblyFile(char *fName, FILE *fp);
+FILE *getAssemblyFile(char *fName);
 
 #endif

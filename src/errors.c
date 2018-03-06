@@ -17,13 +17,13 @@ void printError(Error e, const char *msg)
                 fprintf(stderr, "Error: out of memory.\n");
             }
             break;
-        case fileNotExist:
+        case fileNotAvailable:
             if (msg != NULL) {
-                fprintf(stderr, "Error: file not exist. ");
+                fprintf(stderr, "Error: file not available. ");
                 fprintf(stderr, msg);
                 fprintf(stderr, "\n");
             } else {
-                fprintf(stderr, "Error: file not exist.\n");
+                fprintf(stderr, "Error: file not available.\n");
             }
             break;
         case none:
