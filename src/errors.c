@@ -11,8 +11,7 @@ void printError(Error e, const char *msg)
         case outOfMemory:
             if (msg != NULL) {
                 fprintf(stderr, "Error: out of memory. ");
-                fprintf(stderr, msg);
-                fprintf(stderr, "\n");
+                fprintf(stderr, "%s\n", msg);
             } else {
                 fprintf(stderr, "Error: out of memory.\n");
             }
@@ -20,8 +19,7 @@ void printError(Error e, const char *msg)
         case fileNotAvailable:
             if (msg != NULL) {
                 fprintf(stderr, "Error: file not available. ");
-                fprintf(stderr, msg);
-                fprintf(stderr, "\n");
+                fprintf(stderr, "%s\n", msg);
             } else {
                 fprintf(stderr, "Error: file not available.\n");
             }
@@ -29,8 +27,7 @@ void printError(Error e, const char *msg)
         case fileNotClose:
             if (msg != NULL) {
                 fprintf(stderr, "Error: fail to close file. ");
-                fprintf(stderr, msg);
-                fprintf(stderr, "\n");
+                fprintf(stderr, "%s\n", msg);
             } else {
                 fprintf(stderr, "Error: fail to close file.\n");
             }

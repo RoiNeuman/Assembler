@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "fileHandler.h"
-
+#include "utils.h"
+#include "errors.h"
 
 /* Adds extension to the file name */
 char *addFileExtension(const char *pName, const char *pExtension)

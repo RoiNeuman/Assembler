@@ -9,7 +9,7 @@ typedef  struct ParsedFile {
 
 } ParsedFile;
 
-/* Parse given source file */
+/* Parse a given source file */
 ParsedFile parseFile(FILE *fp, char *fName);
 
 #endif

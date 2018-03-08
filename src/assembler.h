@@ -1,8 +1,6 @@
 #ifndef ASSEMBLER_ASSEMBLER_H
 #define ASSEMBLER_ASSEMBLER_H
 
-#include "errors.h"
-
 /* Operation code */
 typedef enum Opcode {
     mov, /* Copy one operand to another */
