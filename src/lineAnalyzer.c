@@ -11,7 +11,6 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
 {
     int lineIndex, startOfWord, endOfWord, startOfLabel = 0, endOfLabel = 0;
     Boolean hasLabel, hasError;
-    LineType lineType;
 
     lineIndex = clearWhiteCharacters(line, length, FIRST_INDEX);
 
