@@ -9,12 +9,14 @@
 void runAssemblerOnFile(char *fName)
 {
     FILE *fp;
-    ParsedFile pParsed;
+    ParsedFile *pParsed;
 
     fp = getAssemblyFile(fName);
-    pParsed = parseFile(fp, fName);
-    closeFile(fp, fName);
-    /* createResultFile(pParsed); */
+    if (fp != NULL) {
+        pParsed = parseFile(fp, fName);
+        closeFile(fp, fName);
+        /* createResultFile(pParsed); */
+    }
 }
 
 int main(int argc, char *argv[])

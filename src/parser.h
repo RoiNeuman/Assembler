@@ -10,6 +10,6 @@ typedef  struct ParsedFile {
 } ParsedFile;
 
 /* Parse a given source file */
-ParsedFile parseFile(FILE *fp, char *fName);
+ParsedFile *parseFile(FILE *fp, char *fName);
 
 #endif

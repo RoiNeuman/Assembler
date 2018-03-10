@@ -32,6 +32,14 @@ void printError(Error e, const char *msg)
                 fprintf(stderr, "Error: fail to close file.\n");
             }
             break;
+        case readFromFileError:
+            if (msg != NULL) {
+                fprintf(stderr, "Error: reading from a file was failed. ");
+                fprintf(stderr, "%s\n", msg);
+            } else {
+                fprintf(stderr, "Error: reading from a file was failed.\n");
+            }
+            break;
         case none:
         default:
             break;

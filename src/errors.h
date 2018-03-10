@@ -6,7 +6,8 @@ typedef enum Error {
     none,
     outOfMemory,
     fileNotAvailable,
-    fileNotClose
+    fileNotClose,
+    readFromFileError
 } Error;
 
 /* A node in the error list */

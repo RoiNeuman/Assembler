@@ -1,7 +1,8 @@
+#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include "utils.h"
 #include "memoryManager.h"
+#include "errors.h"
 
 /* Convert decimal number to binary number */
 int decimalToBinary(int number)
@@ -42,7 +43,7 @@ char *binaryToMozar(int number)
 }
 
 /* Strings concatenation */
-/* return new char pointer array with the length of both strings and with their content one after the other */
+/* Return new char pointer array with the length of both strings and with their content one after the other */
 char *stringConcat(const char *str1, const char *str2)
 {
     const size_t len1 = strlen(str1);
@@ -56,4 +57,25 @@ char *stringConcat(const char *str1, const char *str2)
     strcpy(concat, str1);
     strcat(concat, str2);
     return concat;
+}
+
+/* Read a line from a file stream */
+int readFileLine(char **line, FILE *fp, const char *fName)
+{
+    *line = (char *)autoDispMalloc(sizeof(char) * READ_LINE_MAX);
+    if (*line == NULL) {
+        logError(outOfMemory, "While reading a line from a file, readFileLine().");
+        return READING_ERROR;
+    }
+    if (fgets(*line, READ_LINE_MAX, fp) == NULL) {
+        if (ferror(fp)) {
+            /* Error in reading from file */
+            logError(readFromFileError, fName);
+            return READING_ERROR;
+        } else {
+            /* Only EOF was read */
+            return READING_EOF;
+        }
+    }
+    return strlen(*line);
 }

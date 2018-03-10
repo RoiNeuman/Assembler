@@ -1,6 +1,10 @@
 #ifndef ASSEMBLER_UTILS_H
 #define ASSEMBLER_UTILS_H
 
+#define READ_LINE_MAX 256
+#define READING_ERROR 0
+#define READING_EOF (-1)
+
 /* Represent a boolean */
 typedef enum Boolean {
     false,
@@ -20,7 +24,10 @@ int mozarToBinary(char *number);
 char *binaryToMozar(int number);
 
 /* Strings concatenation */
-/* return new char pointer array with the length of both strings and with their content one after the other */
+/* Return new char pointer array with the length of both strings and with their content one after the other */
 char *stringConcat(const char *str1, const char *str2);
+
+/* Read a line from a file stream */
+int readFileLine(char **line, FILE *fp, const char *fName);
 
 #endif
