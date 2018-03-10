@@ -1,6 +1,8 @@
 #ifndef ASSEMBLER_UTILS_H
 #define ASSEMBLER_UTILS_H
 
+#include <stdio.h>
+
 #define READ_LINE_MAX 256
 #define READING_ERROR 0
 #define READING_EOF (-1)
@@ -35,5 +37,11 @@ Boolean isWhiteCharacter(int c);
 
 /* Checking if the given line is a comment line */
 Boolean isComment(const char *line, int start);
+
+/* Checking whether the given line contain a label */
+Boolean isLabel(const char *line, int end);
+
+/* Checking whether the given line is a guidance line or instructive line */
+Boolean isGuidanceLine(const char *line, int start);
 
 #endif

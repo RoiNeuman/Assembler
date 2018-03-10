@@ -10,34 +10,44 @@ void printError(Error e, const char *msg)
     switch (e) {
         case outOfMemory:
             if (msg != NULL) {
-                fprintf(stderr, "Error: out of memory. ");
-                fprintf(stderr, "%s\n", msg);
+                fprintf(stderr, "Error: out of memory. %s\n", msg);
             } else {
                 fprintf(stderr, "Error: out of memory.\n");
             }
             break;
         case fileNotAvailable:
             if (msg != NULL) {
-                fprintf(stderr, "Error: file not available. ");
-                fprintf(stderr, "%s\n", msg);
+                fprintf(stderr, "Error: file not available. %s\n", msg);
             } else {
                 fprintf(stderr, "Error: file not available.\n");
             }
             break;
         case fileNotClose:
             if (msg != NULL) {
-                fprintf(stderr, "Error: fail to close file. ");
-                fprintf(stderr, "%s\n", msg);
+                fprintf(stderr, "Error: fail to close file. %s\n", msg);
             } else {
                 fprintf(stderr, "Error: fail to close file.\n");
             }
             break;
         case readFromFileError:
             if (msg != NULL) {
-                fprintf(stderr, "Error: reading from a file was failed. ");
-                fprintf(stderr, "%s\n", msg);
+                fprintf(stderr, "Error: reading from a file was failed. %s\n", msg);
             } else {
                 fprintf(stderr, "Error: reading from a file was failed.\n");
+            }
+            break;
+        case labelWithEntry:
+            if (msg != NULL) {
+                fprintf(stderr, "Warning: Label before .entry line. %s\n", msg);
+            } else {
+                fprintf(stderr, "Warning: Label before .entry line.\n");
+            }
+            break;
+        case labelWithExtern:
+            if (msg != NULL) {
+                fprintf(stderr, "Warning: Label before .extern line. %s\n", msg);
+            } else {
+                fprintf(stderr, "Warning: Label before .extern line.\n");
             }
             break;
         case none:

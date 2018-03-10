@@ -1,12 +1,11 @@
+#include <string.h>
 #include "parser.h"
 #include "memoryManager.h"
 #include "errors.h"
 #include "utils.h"
+#include "lineAnalyzer.h"
 
 static int _parseLine(ParsedFile *pfp, FILE *fp);
-static void _analyzeLine(const char *line, int length);
-static int _clearWhiteCharacters(const char *line, int length, int index);
-static int _readNextWord(const char *line, int index, int *start, int *end);
 
 /* Parse a given source file */
 ParsedFile *parseFile(FILE *fp, char *fName)
@@ -40,6 +39,7 @@ static int _parseLine(ParsedFile *pfp, FILE *fp)
 {
     int length;
     char *line;
+    Boolean hasError;
 
     line = NULL;
     length = readFileLine(&line, fp, pfp->fName);
@@ -49,7 +49,11 @@ static int _parseLine(ParsedFile *pfp, FILE *fp)
     }
 
     /* Analyze the line */
-    _analyzeLine(line, length);
+    hasError = analyzeLine(pfp, line, length);
+
+    if (hasError) { /* This line contain an error */
+        return READING_ERROR;
+    }
 
     /* Checking if it's the last line in the file */
     if (*(line + length - 1) != EOF) {
@@ -61,25 +65,8 @@ static int _parseLine(ParsedFile *pfp, FILE *fp)
     }
 }
 
-/* Analyze the given line */
-static void _analyzeLine(const char *line, const int length)
-{
-    int lineIndex, startOfWord, endOfWord;
-    LineType lineType;
-
-    lineIndex = _clearWhiteCharacters(line, length, FIRST_INDEX);
-
-    if (lineIndex == length) return; /* End of Line */
-
-    lineIndex = _readNextWord(line, lineIndex, &startOfWord, &endOfWord);
-
-    if (isComment(line, startOfWord)) return; /* Skipping comment line */
-
-    /*lineType = _filterFirstWord(line, startOfWord, endOfWord);*/
-}
-
 /* Return the next index in the line which is not a white character */
-static int _clearWhiteCharacters(const char *line, const int length, int index)
+int clearWhiteCharacters(const char *line, const int length, int index)
 {
     while (index != length && isWhiteCharacter(*(line + index))) {
         index++;
@@ -89,7 +76,7 @@ static int _clearWhiteCharacters(const char *line, const int length, int index)
 
 /* Read the next word from a line */
 /* Return the next index after the word */
-static int _readNextWord(const char *line, int index, int *start, int *end)
+int readNextWord(const char *line, int index, int *start, int *end)
 {
     *start = index;
     while (isWhiteCharacter(*(line + index)) == false) {

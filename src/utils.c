@@ -91,3 +91,15 @@ Boolean isComment(const char *line, int start)
 {
     return *(line + start) == ';' ? true : false;
 }
+
+/* Checking whether the given line contain a label */
+Boolean isLabel(const char *line, int end)
+{
+    return *(line + end) == ':' ? true : false;
+}
+
+/* Checking whether the given line is a guidance line or instructive line */
+Boolean isGuidanceLine(const char *line, int start)
+{
+    return *(line + start) == '.' ? true : false;
+}

@@ -7,7 +7,9 @@ typedef enum Error {
     outOfMemory,
     fileNotAvailable,
     fileNotClose,
-    readFromFileError
+    readFromFileError,
+    labelWithEntry,
+    labelWithExtern
 } Error;
 
 /* A node in the error list */
