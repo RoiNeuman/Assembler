@@ -30,4 +30,10 @@ char *stringConcat(const char *str1, const char *str2);
 /* Read a line from a file stream */
 int readFileLine(char **line, FILE *fp, const char *fName);
 
+/* Checking white character */
+Boolean isWhiteCharacter(int c);
+
+/* Checking if the given line is a comment line */
+Boolean isComment(const char *line, int start);
+
 #endif
