@@ -1,6 +1,8 @@
 #ifndef ASSEMBLER_ASSEMBLER_H
 #define ASSEMBLER_ASSEMBLER_H
 
+#include "utils.h"
+
 /* Operation code */
 typedef enum Opcode {
     mov, /* Copy one operand to another */
@@ -20,6 +22,42 @@ typedef enum Opcode {
     rts, /* Return from subroutine */
     stop /* Stop the program */
 } Opcode;
+
+typedef enum Utype {
+    ival, /* Int value */
+    cval /* Char value */
+} Utype;
+
+typedef struct Instruction {
+    Opcode oc;
+    struct Instruction *next;
+} Instruction;
+
+typedef struct Data {
+    Utype utype;
+    union u {
+        int ival;
+        char cval;
+    };
+    struct Data *next;
+} Data;
+
+typedef struct Label {
+    char *name;
+    int counter;
+    Boolean hasEntry;
+    struct Label *next;
+} Label;
+
+/* Parsed assembly file */
+typedef struct ParsedFile {
+    char *fName;
+    int IC; /* Instruction counter */
+    int DC; /* Data counter */
+    Instruction *iList; /* Instructions list */
+    Data *dList; /* Data list */
+    Label *lList; /* Labels list */
+} ParsedFile;
 
 /* Run the assembler on a file */
 void runAssemblerOnFile(char *fName);

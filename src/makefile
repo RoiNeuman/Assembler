@@ -2,11 +2,14 @@
 
 all: assembler
 
-assembler: assembler.o lineAnalyzer.o parser.o fileHandler.o utils.o errors.o memoryManager.o
-	gcc -ansi -Wall -pedantic -o assembler assembler.o lineAnalyzer.o parser.o fileHandler.o utils.o errors.o memoryManager.o
+assembler: main.o assembler.o lineAnalyzer.o parser.o fileHandler.o utils.o errors.o memoryManager.o
+	gcc -ansi -Wall -pedantic -o assembler main.o assembler.o lineAnalyzer.o parser.o fileHandler.o utils.o errors.o memoryManager.o
 
-assembler.o: assembler.c assembler.h fileHandler.h memoryManager.h parser.h errors.h
-	gcc -ansi -Wall -pedantic -c assembler.c assembler.h fileHandler.h memoryManager.h parser.h errors.h
+main.o: main.c assembler.h memoryManager.h errors.h
+	gcc -ansi -Wall -pedantic -c main.c assembler.h memoryManager.h errors.h
+
+assembler.o: assembler.c assembler.h fileHandler.h parser.h
+	gcc -ansi -Wall -pedantic -c assembler.c assembler.h fileHandler.h parser.h
 
 lineAnalyzer.o: lineAnalyzer.c lineAnalyzer.h parser.h utils.h errors.h
 	gcc -ansi -Wall -pedantic -c lineAnalyzer.c lineAnalyzer.h parser.h utils.h errors.h

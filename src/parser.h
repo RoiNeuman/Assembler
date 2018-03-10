@@ -2,6 +2,7 @@
 #define ASSEMBLER_PARSER_H
 
 #include <stdio.h>
+#include "assembler.h"
 
 #define FIRST_INDEX 0
 #define GUIDANCE_DATA ".data"
@@ -9,12 +10,6 @@
 #define GUIDANCE_STRING ".string"
 #define GUIDANCE_ENTRY ".entry"
 #define GUIDANCE_EXTERN ".extern"
-
-/* Parsed file type */
-typedef struct ParsedFile {
-    char *fName;
-
-} ParsedFile;
 
 /* Parse a given source file */
 ParsedFile *parseFile(FILE *fp, char *fName);
