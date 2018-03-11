@@ -50,6 +50,13 @@ void printError(Error e, const char *msg)
                 fprintf(stderr, "Warning: Label before .extern line.\n");
             }
             break;
+        case undefinedData:
+            if (msg != NULL) {
+                fprintf(stderr, "Error: Undefined character in .data line. %s\n", msg);
+            } else {
+                fprintf(stderr, "Error: Undefined character in .data line.\n");
+            }
+            break;
         case none:
         default:
             break;

@@ -86,6 +86,12 @@ Boolean isWhiteCharacter(const int c)
     return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == EOF) ? true : false;
 }
 
+/* Checking white character or comma */
+Boolean isWhiteCharOrComma(const int c)
+{
+    return (c == ',' || c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == EOF) ? true : false;
+}
+
 /* Checking if the given line is a comment line */
 Boolean isComment(const char *line, int start)
 {

@@ -57,9 +57,16 @@ typedef struct ParsedFile {
     Instruction *iList; /* Instructions list */
     Data *dList; /* Data list */
     Label *lList; /* Labels list */
+    Boolean hasError;
 } ParsedFile;
 
 /* Run the assembler on a file */
 void runAssemblerOnFile(char *fName);
+
+/* Initializing new ParsedFile struct */
+ParsedFile *initializeParsedFile(char *fName);
+
+/* Add data to the data list */
+Boolean addData(ParsedFile *pfp, int data);
 
 #endif

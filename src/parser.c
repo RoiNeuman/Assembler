@@ -1,8 +1,5 @@
-#include <string.h>
 #include "parser.h"
 #include "memoryManager.h"
-#include "errors.h"
-#include "utils.h"
 #include "lineAnalyzer.h"
 
 static int _parseLine(ParsedFile *pfp, FILE *fp);
@@ -14,14 +11,7 @@ ParsedFile *parseFile(FILE *fp, char *fName)
     int lineLength;
 
     /* Allocating memory for the ParsedFile object */
-    pfp = (ParsedFile *)autoDispMalloc(sizeof(ParsedFile));
-
-    if (pfp == NULL) {
-        logError(outOfMemory, "Allocating parseFile struct, parseFile()");
-        return NULL;
-    }
-
-    pfp->fName = fName;
+    pfp = initializeParsedFile(fName);
 
     do { /* Parse all the file's lines */
         lineLength = _parseLine(pfp, fp);
@@ -69,6 +59,15 @@ static int _parseLine(ParsedFile *pfp, FILE *fp)
 int clearWhiteCharacters(const char *line, const int length, int index)
 {
     while (index != length && isWhiteCharacter(*(line + index))) {
+        index++;
+    }
+    return index;
+}
+
+/* Return the next index in the line which is not a white character or comma */
+int clearWhiteCharOrComma(const char *line, const int length, int index)
+{
+    while (index != length && isWhiteCharOrComma(*(line + index))) {
         index++;
     }
     return index;

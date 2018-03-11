@@ -8,14 +8,14 @@ assembler: main.o assembler.o lineAnalyzer.o parser.o fileHandler.o utils.o erro
 main.o: main.c assembler.h memoryManager.h errors.h
 	gcc -ansi -Wall -pedantic -c main.c assembler.h memoryManager.h errors.h
 
-assembler.o: assembler.c assembler.h fileHandler.h parser.h
-	gcc -ansi -Wall -pedantic -c assembler.c assembler.h fileHandler.h parser.h
+assembler.o: assembler.c assembler.h fileHandler.h parser.h memoryManager.h errors.h
+	gcc -ansi -Wall -pedantic -c assembler.c assembler.h fileHandler.h parser.h memoryManager.h errors.h
 
 lineAnalyzer.o: lineAnalyzer.c lineAnalyzer.h parser.h utils.h errors.h
 	gcc -ansi -Wall -pedantic -c lineAnalyzer.c lineAnalyzer.h parser.h utils.h errors.h
 
-parser.o: parser.c parser.h memoryManager.h errors.h utils.h lineAnalyzer.h
-	gcc -ansi -Wall -pedantic -c parser.c parser.h memoryManager.h errors.h utils.h lineAnalyzer.h
+parser.o: parser.c parser.h memoryManager.h lineAnalyzer.h
+	gcc -ansi -Wall -pedantic -c parser.c parser.h memoryManager.h lineAnalyzer.h
 
 fileHandler.o: fileHandler.c fileHandler.h utils.h errors.h
 	gcc -ansi -Wall -pedantic -c fileHandler.c fileHandler.h utils.h errors.h

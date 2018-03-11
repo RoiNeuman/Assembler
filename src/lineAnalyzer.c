@@ -1,11 +1,12 @@
 #include <string.h>
+#include <ctype.h>
 #include "lineAnalyzer.h"
 #include "errors.h"
 
 static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int
 endOfWord, Boolean *hasLabel);
 static Boolean _analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
-static Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
+static Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, int length, int lineIndex);
 static Boolean _analyzeStructLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
 static Boolean _analyzeStringLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
 static Boolean _analyzeEntryLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
@@ -56,7 +57,7 @@ static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int
 
     if (0 == strncmp(line + startOfWord, GUIDANCE_DATA, strlen(GUIDANCE_DATA))) {
         /* Data line */
-        hasError = _analyzeDataLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
+        hasError = _analyzeDataLine(pfp, line, length, lineIndex);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_STRUCT, strlen(GUIDANCE_STRUCT))) {
         /* Struct line */
         hasError = _analyzeStructLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
@@ -91,9 +92,32 @@ static Boolean _analyzeInstructionLine(ParsedFile *pfp, const char *line, const 
     return hasError;
 }
 
-static Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
+static Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
 {
+    int sign, c, data;
+    Boolean hasError;
 
+    hasError = false;
+    lineIndex = clearWhiteCharacters(line, length, lineIndex);
+    while (lineIndex != length && hasError == false) {
+        data = 0, sign = 1;
+        if ((c = *(line + lineIndex)) == '-' || c == '+') {
+            sign = c == '-' ? -1 : 1;
+            lineIndex++;
+        }
+        while (lineIndex != length && isdigit(c = *(line + lineIndex))) {
+            data = (data * 10) + (c - '0');
+            lineIndex++;
+        }
+        if (lineIndex != length) {
+            logError(undefinedData, NULL);
+            pfp->hasError = true;
+            break;
+        }
+        hasError = addData(pfp, (data * sign));
+        lineIndex = clearWhiteCharOrComma(line, length, lineIndex);
+    }
+    return hasError;
 }
 
 static Boolean _analyzeStructLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)

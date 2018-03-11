@@ -9,7 +9,8 @@ typedef enum Error {
     fileNotClose,
     readFromFileError,
     labelWithEntry,
-    labelWithExtern
+    labelWithExtern,
+    undefinedData
 } Error;
 
 /* A node in the error list */
