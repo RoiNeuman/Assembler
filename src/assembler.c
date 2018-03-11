@@ -74,5 +74,6 @@ Boolean addData(ParsedFile *pfp, int data, Utype type)
         }
         prev->next = newData;
     }
+    pfp->DC++; /* Incrementing the data counter */
     return false;
 }
