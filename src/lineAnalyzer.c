@@ -114,7 +114,7 @@ static Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, const int len
             pfp->hasError = true;
             break;
         }
-        hasError = addData(pfp, (data * sign));
+        hasError = addData(pfp, (data * sign), ival);
         lineIndex = clearWhiteCharOrComma(line, length, lineIndex);
     }
     return hasError;

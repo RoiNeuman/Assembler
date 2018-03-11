@@ -38,7 +38,7 @@ typedef struct Data {
     union u {
         int ival;
         char cval;
-    };
+    } value;
     struct Data *next;
 } Data;
 
@@ -67,6 +67,6 @@ void runAssemblerOnFile(char *fName);
 ParsedFile *initializeParsedFile(char *fName);
 
 /* Add data to the data list */
-Boolean addData(ParsedFile *pfp, int data);
+Boolean addData(ParsedFile *pfp, int data, Utype type);
 
 #endif

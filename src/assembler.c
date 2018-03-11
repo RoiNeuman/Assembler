@@ -34,16 +34,45 @@ ParsedFile *initializeParsedFile(char *fName)
         return NULL;
     }
 
+    /* Initialize the new struct properties */
     pfp->fName = fName;
     pfp->IC = 0;
     pfp->DC = 0;
     pfp->hasError = false;
+    pfp->iList = NULL;
+    pfp->dList = NULL;
+    pfp->lList = NULL;
 
     return pfp;
 }
 
 /* Add data to the data list */
-Boolean addData(ParsedFile *pfp, int data)
+Boolean addData(ParsedFile *pfp, int data, Utype type)
 {
+    Data *newData, *prev;
 
+    newData = (Data *)autoDispMalloc(sizeof(Data));
+
+    if (newData == NULL) {
+        logError(outOfMemory, "Adding new data to the data list.");
+        return true;
+    }
+
+    /* Adding the new struct properties */
+    newData->utype = type;
+    newData->value.ival = data;
+    newData->next = NULL;
+
+    /* Adding the new data struct to the data list */
+    if (pfp->dList == NULL) {
+        /* First data in the data list */
+        pfp->dList = newData;
+    } else {
+        prev = pfp->dList;
+        while (prev->next != NULL) {
+            prev = prev->next;
+        }
+        prev->next = newData;
+    }
+    return false;
 }
