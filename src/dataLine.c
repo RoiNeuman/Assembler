@@ -3,7 +3,8 @@
 #include "parser.h"
 #include "errors.h"
 
-Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
+/* Analyze a data line of numbers */
+Boolean analyzeDataLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
 {
     int sign, c, data;
     Boolean hasError;
@@ -32,7 +33,8 @@ Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, const int length, in
     return hasError;
 }
 
-Boolean _analyzeStructLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
+/* Analyze a struct line data of strings and numbers */
+Boolean analyzeStructLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
 {
     int sign, c, data;
     Boolean hasError;
@@ -80,7 +82,8 @@ Boolean _analyzeStructLine(ParsedFile *pfp, const char *line, const int length, 
     return hasError;
 }
 
-Boolean _analyzeStringLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
+/* Analyze a string line of characters */
+Boolean analyzeStringLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
 {
     int c;
     Boolean hasError;
@@ -103,12 +106,14 @@ Boolean _analyzeStringLine(ParsedFile *pfp, const char *line, const int length, 
     return hasError;
 }
 
-Boolean _analyzeEntryLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
+/* Analyze an entry line of inner label */
+Boolean analyzeEntryLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
 {
 
 }
 
-Boolean _analyzeExternLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
+/* Analyze an extern line */
+Boolean analyzeExternLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
 {
 
 }

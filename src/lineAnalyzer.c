@@ -53,27 +53,27 @@ static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int
 
     if (0 == strncmp(line + startOfWord, GUIDANCE_DATA, strlen(GUIDANCE_DATA))) {
         /* Data line */
-        hasError = _analyzeDataLine(pfp, line, length, lineIndex);
+        hasError = analyzeDataLine(pfp, line, length, lineIndex);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_STRUCT, strlen(GUIDANCE_STRUCT))) {
         /* Struct line */
-        hasError = _analyzeStructLine(pfp, line, length, lineIndex);
+        hasError = analyzeStructLine(pfp, line, length, lineIndex);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_STRING, strlen(GUIDANCE_STRING))) {
         /* String line */
-        hasError = _analyzeStringLine(pfp, line, length, lineIndex);
+        hasError = analyzeStringLine(pfp, line, length, lineIndex);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_ENTRY, strlen(GUIDANCE_ENTRY))) {
         /* Entry line */
         if (*hasLabel) {
             logError(labelWithEntry, NULL);
             *hasLabel = false;
         }
-        hasError = _analyzeEntryLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
+        hasError = analyzeEntryLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_EXTERN, strlen(GUIDANCE_EXTERN))) {
         /* Extern line */
         if (*hasLabel) {
             logError(labelWithExtern, NULL);
             *hasLabel = false;
         }
-        hasError = _analyzeExternLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
+        hasError = analyzeExternLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
     }
     return hasError;
 }
