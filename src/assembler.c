@@ -47,7 +47,7 @@ ParsedFile *initializeParsedFile(char *fName)
 }
 
 /* Add data to the data list */
-Boolean addData(ParsedFile *pfp, int data, Utype type)
+Boolean addData(ParsedFile *pfp, int data)
 {
     Data *newData, *prev;
 
@@ -59,8 +59,7 @@ Boolean addData(ParsedFile *pfp, int data, Utype type)
     }
 
     /* Adding the new struct properties */
-    newData->utype = type;
-    newData->value.ival = data;
+    newData->value = data;
     newData->next = NULL;
 
     /* Adding the new data struct to the data list */

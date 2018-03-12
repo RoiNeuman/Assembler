@@ -23,22 +23,13 @@ typedef enum Opcode {
     stop /* Stop the program */
 } Opcode;
 
-typedef enum Utype {
-    ival, /* Int value */
-    cval /* Char value */
-} Utype;
-
 typedef struct Instruction {
     Opcode oc;
     struct Instruction *next;
 } Instruction;
 
 typedef struct Data {
-    Utype utype;
-    union u {
-        int ival;
-        char cval;
-    } value;
+    int value;
     struct Data *next;
 } Data;
 
@@ -67,6 +58,6 @@ void runAssemblerOnFile(char *fName);
 ParsedFile *initializeParsedFile(char *fName);
 
 /* Add data to the data list */
-Boolean addData(ParsedFile *pfp, int data, Utype type);
+Boolean addData(ParsedFile *pfp, int data);
 
 #endif
