@@ -78,7 +78,7 @@ int clearWhiteCharOrComma(const char *line, const int length, int index)
 int readNextWord(const char *line, int index, int *start, int *end)
 {
     *start = index;
-    while (isWhiteCharacter(*(line + index)) == false) {
+    while (isWhiteCharacter(*(line + index)) == false && *(line + index) != EOF) {
         index++;
     }
     *end = index - 1;

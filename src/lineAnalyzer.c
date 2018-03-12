@@ -1,16 +1,11 @@
 #include <string.h>
-#include <ctype.h>
 #include "lineAnalyzer.h"
+#include "dataLine.h"
 #include "errors.h"
 
 static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int
 endOfWord, Boolean *hasLabel);
 static Boolean _analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
-static Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, int length, int lineIndex);
-static Boolean _analyzeStructLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
-static Boolean _analyzeStringLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
-static Boolean _analyzeEntryLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
-static Boolean _analyzeExternLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
 
 /* Analyze the given line */
 Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
@@ -30,11 +25,12 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
         return false;
     }
 
-    if ((hasLabel = isLabel(line, endOfWord))) { /* Marking label if any */
+    if ((hasLabel = isLabel(line, startOfWord, endOfWord))) { /* Marking label if any */
         startOfLabel = startOfWord;
         endOfLabel = endOfWord - 1;
         lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
         lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
+
     }
 
     if (isGuidanceLine(line, startOfWord)) {
@@ -60,10 +56,10 @@ static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int
         hasError = _analyzeDataLine(pfp, line, length, lineIndex);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_STRUCT, strlen(GUIDANCE_STRUCT))) {
         /* Struct line */
-        hasError = _analyzeStructLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
+        hasError = _analyzeStructLine(pfp, line, length, lineIndex);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_STRING, strlen(GUIDANCE_STRING))) {
         /* String line */
-        hasError = _analyzeStringLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
+        hasError = _analyzeStringLine(pfp, line, length, lineIndex);
     } else if (0 == strncmp(line + startOfWord, GUIDANCE_ENTRY, strlen(GUIDANCE_ENTRY))) {
         /* Entry line */
         if (*hasLabel) {
@@ -90,52 +86,4 @@ static Boolean _analyzeInstructionLine(ParsedFile *pfp, const char *line, const 
     hasError = false;
 
     return hasError;
-}
-
-static Boolean _analyzeDataLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
-{
-    int sign, c, data;
-    Boolean hasError;
-
-    hasError = false;
-    lineIndex = clearWhiteCharacters(line, length, lineIndex);
-    while (lineIndex != length && hasError == false) {
-        data = 0, sign = 1;
-        if ((c = *(line + lineIndex)) == '-' || c == '+') {
-            sign = c == '-' ? -1 : 1;
-            lineIndex++;
-        }
-        while (lineIndex != length && isdigit(c = *(line + lineIndex))) {
-            data = (data * 10) + (c - '0');
-            lineIndex++;
-        }
-        if (lineIndex != length) {
-            logError(undefinedData, NULL);
-            pfp->hasError = true;
-            break;
-        }
-        hasError = addData(pfp, (data * sign), ival);
-        lineIndex = clearWhiteCharOrComma(line, length, lineIndex);
-    }
-    return hasError;
-}
-
-static Boolean _analyzeStructLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
-{
-
-}
-
-static Boolean _analyzeStringLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
-{
-
-}
-
-static Boolean _analyzeEntryLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
-{
-
-}
-
-static Boolean _analyzeExternLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
-{
-
 }

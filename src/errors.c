@@ -9,57 +9,45 @@ void printError(Error e, const char *msg)
 {
     switch (e) {
         case outOfMemory:
-            if (msg != NULL) {
-                fprintf(stderr, "Error: out of memory. %s\n", msg);
-            } else {
-                fprintf(stderr, "Error: out of memory.\n");
-            }
+            fprintf(stderr, "Error: out of memory.\n");
             break;
         case fileNotAvailable:
-            if (msg != NULL) {
-                fprintf(stderr, "Error: file not available. %s\n", msg);
-            } else {
-                fprintf(stderr, "Error: file not available.\n");
-            }
+            fprintf(stderr, "Error: file not available.\n");
             break;
         case fileNotClose:
-            if (msg != NULL) {
-                fprintf(stderr, "Error: fail to close file. %s\n", msg);
-            } else {
-                fprintf(stderr, "Error: fail to close file.\n");
-            }
+            fprintf(stderr, "Error: fail to close file.\n");
             break;
         case readFromFileError:
-            if (msg != NULL) {
-                fprintf(stderr, "Error: reading from a file was failed. %s\n", msg);
-            } else {
-                fprintf(stderr, "Error: reading from a file was failed.\n");
-            }
+            fprintf(stderr, "Error: reading from a file was failed.\n");
             break;
         case labelWithEntry:
-            if (msg != NULL) {
-                fprintf(stderr, "Warning: Label before .entry line. %s\n", msg);
-            } else {
-                fprintf(stderr, "Warning: Label before .entry line.\n");
-            }
+            fprintf(stderr, "Warning: Label before .entry line.\n");
             break;
         case labelWithExtern:
-            if (msg != NULL) {
-                fprintf(stderr, "Warning: Label before .extern line. %s\n", msg);
-            } else {
-                fprintf(stderr, "Warning: Label before .extern line.\n");
-            }
+            fprintf(stderr, "Warning: Label before .extern line.\n");
             break;
         case undefinedData:
-            if (msg != NULL) {
-                fprintf(stderr, "Error: Undefined character in .data line. %s\n", msg);
-            } else {
-                fprintf(stderr, "Error: Undefined character in .data line.\n");
-            }
+            fprintf(stderr, "Error: Undefined character in .data line.\n");
+            break;
+        case labelStartPosition:
+            fprintf(stderr, "Error: Label not the at the start of the line.\n");
+            break;
+        case labelFirstChar:
+            fprintf(stderr, "Error: Label not start with a letter.\n");
+            break;
+        case labelMaxLength:
+            fprintf(stderr, "Error: Label extends 30 characters.\n");
+            break;
+        case missedQuotationMark:
+            fprintf(stderr, "Error: Missing quotation mark in string input.\n");
             break;
         case none:
         default:
             break;
+    }
+    /* Printing extra message if any */
+    if (msg != NULL) {
+        fprintf(stderr, "->\t%s\n", msg);
     }
 }
 

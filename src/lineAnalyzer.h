@@ -1,7 +1,6 @@
 #ifndef ASSEMBLER_LINEANALYZER_H
 #define ASSEMBLER_LINEANALYZER_H
 
-#include "assembler.h"
 #include "parser.h"
 #include "utils.h"
 

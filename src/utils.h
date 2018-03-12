@@ -6,6 +6,8 @@
 #define READ_LINE_MAX 256
 #define READING_ERROR 0
 #define READING_EOF (-1)
+#define LABEL_START_POSITION 0
+#define LABEL_MAX_LENGTH 30
 
 /* Represent a boolean */
 typedef enum Boolean {
@@ -35,13 +37,13 @@ int readFileLine(char **line, FILE *fp, const char *fName);
 /* Checking white character */
 Boolean isWhiteCharacter(int c);
 
-Boolean isWhiteCharOrComma(const int c);
+Boolean isWhiteCharOrComma(int c);
 
 /* Checking if the given line is a comment line */
 Boolean isComment(const char *line, int start);
 
 /* Checking whether the given line contain a label */
-Boolean isLabel(const char *line, int end);
+Boolean isLabel(const char *line, int start, int end);
 
 /* Checking whether the given line is a guidance line or instructive line */
 Boolean isGuidanceLine(const char *line, int start);

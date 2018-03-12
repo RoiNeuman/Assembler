@@ -10,7 +10,11 @@ typedef enum Error {
     readFromFileError,
     labelWithEntry,
     labelWithExtern,
-    undefinedData
+    undefinedData,
+    labelStartPosition,
+    labelFirstChar,
+    labelMaxLength,
+    missedQuotationMark
 } Error;
 
 /* A node in the error list */

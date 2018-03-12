@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include "utils.h"
 #include "memoryManager.h"
 #include "errors.h"
@@ -83,13 +84,13 @@ int readFileLine(char **line, FILE *fp, const char *fName)
 /* Checking white character */
 Boolean isWhiteCharacter(const int c)
 {
-    return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == EOF) ? true : false;
+    return (c == ' ' || c == '\t' || c == '\r' || c == '\n') ? true : false;
 }
 
 /* Checking white character or comma */
 Boolean isWhiteCharOrComma(const int c)
 {
-    return (c == ',' || c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == EOF) ? true : false;
+    return (c == ',' || c == ' ' || c == '\t' || c == '\r' || c == '\n') ? true : false;
 }
 
 /* Checking if the given line is a comment line */
@@ -99,9 +100,27 @@ Boolean isComment(const char *line, int start)
 }
 
 /* Checking whether the given line contain a label */
-Boolean isLabel(const char *line, int end)
+Boolean isLabel(const char *line, int start, int end)
 {
-    return *(line + end) == ':' ? true : false;
+    Boolean _isLabel;
+    _isLabel = true;
+    if (*(line + end) != ':') {
+        _isLabel = false;
+    } else {
+        if (start != LABEL_START_POSITION) {
+            logError(labelStartPosition, NULL);
+            _isLabel = false;
+        }
+        if (isalpha(*(line + end))) {
+            logError(labelFirstChar, NULL);
+            _isLabel = false;
+        }
+        if (end - start >= LABEL_MAX_LENGTH) {
+            logError(labelMaxLength, NULL);
+            _isLabel = false;
+        }
+    }
+    return _isLabel;
 }
 
 /* Checking whether the given line is a guidance line or instructive line */
