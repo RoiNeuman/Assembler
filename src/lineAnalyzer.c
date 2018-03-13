@@ -24,7 +24,7 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
         return false;
     }
 
-    if ((hasLabel = isLabel(line, startOfWord, endOfWord))) { /* Marking label if any */
+    if ((hasLabel = isLineLabel(line, startOfWord, endOfWord))) { /* Marking label if any */
         startOfLabel = startOfWord;
         endOfLabel = endOfWord - 1;
         lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);

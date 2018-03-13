@@ -8,6 +8,7 @@
 #define READING_EOF (-1)
 #define LABEL_START_POSITION 0
 #define LABEL_MAX_LENGTH 30
+#define LABEL_WITHOUT_DECLERATION -1
 
 /* Represent a boolean */
 typedef enum Boolean {
@@ -42,8 +43,11 @@ Boolean isWhiteCharOrComma(int c);
 /* Checking if the given line is a comment line */
 Boolean isComment(const char *line, int start);
 
-/* Checking whether the given line contain a label */
+/* Checking label content */
 Boolean isLabel(const char *line, int start, int end);
+
+/* Checking whether the given line contain a label */
+Boolean isLineLabel(const char *line, int start, int end);
 
 /* Checking whether the given line is a guidance line or instructive line */
 Boolean isGuidanceLine(const char *line, int start);

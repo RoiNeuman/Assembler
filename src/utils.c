@@ -99,24 +99,31 @@ Boolean isComment(const char *line, int start)
     return *(line + start) == ';' ? true : false;
 }
 
-/* Checking whether the given line contain a label */
+/* Checking label content */
 Boolean isLabel(const char *line, int start, int end)
 {
     Boolean _isLabel;
     _isLabel = true;
-    if (*(line + end) != ':') {
+    if (!isalpha(*(line + start))) {
+        logError(labelFirstChar, NULL);
         _isLabel = false;
-    } else {
+    }
+    if (end - start >= LABEL_MAX_LENGTH) {
+        logError(labelMaxLength, NULL);
+        _isLabel = false;
+    }
+    return _isLabel;
+}
+
+/* Checking whether the given line contain a label */
+Boolean isLineLabel(const char *line, int start, int end)
+{
+    Boolean _isLabel;
+    _isLabel = false;
+    if (*(line + end) != ':' && isLabel(line, start, end)) {
+        _isLabel = true;
         if (start != LABEL_START_POSITION) {
             logError(labelStartPosition, NULL);
-            _isLabel = false;
-        }
-        if (isalpha(*(line + end))) {
-            logError(labelFirstChar, NULL);
-            _isLabel = false;
-        }
-        if (end - start >= LABEL_MAX_LENGTH) {
-            logError(labelMaxLength, NULL);
             _isLabel = false;
         }
     }

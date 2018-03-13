@@ -53,6 +53,7 @@ typedef struct Label {
     int counter; /* The label position */
     CounterType ct; /* Label counter's type */
     Boolean hasEntry; /* Is this label has an entry line */
+    Boolean hasExtern; /* Is this label has an extern line */
     LineCounter *lines; /* Line with this label */
     struct Label *next; /* Next label on the list */
 } Label;
@@ -76,5 +77,11 @@ ParsedFile *initializeParsedFile(char *fName);
 
 /* Add data to the data list */
 Boolean addData(ParsedFile *pfp, int data);
+
+/* Add label to the labels list */
+Boolean addLabel(ParsedFile *pfp, const char *line, int start, int end, CounterType ct, Boolean hasEntry, Boolean hasExtern);
+
+/* Add new line counter to a label */
+Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct);
 
 #endif

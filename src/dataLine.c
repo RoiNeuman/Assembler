@@ -110,14 +110,22 @@ Boolean analyzeStringLine(ParsedFile *pfp, const char *line, const int length, i
 Boolean analyzeEntryLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
 {
     lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
-    lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
-
+    readNextWord(line, lineIndex, &startOfWord, &endOfWord);
+    if (endOfWord - startOfWord != 0 && isLabel(line, startOfWord, endOfWord)) {
+        /* This is a label */
+        return addLabel(pfp, line, startOfWord, endOfWord, DC, true, false);
+    }
+    return false;
 }
 
 /* Analyze an extern line */
 Boolean analyzeExternLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
 {
     lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
-    lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
-
+    readNextWord(line, lineIndex, &startOfWord, &endOfWord);
+    if (endOfWord - startOfWord != 0 && isLabel(line, startOfWord, endOfWord)) {
+        /* This is a label */
+        return addLabel(pfp, line, startOfWord, endOfWord, DC, false, true);
+    }
+    return false;
 }
