@@ -44,7 +44,7 @@ Boolean analyzeStructLine(ParsedFile *pfp, const char *line, const int length, i
     while (lineIndex != length && hasError == false) {
         if ((c = *(line + lineIndex)) == '\"') { /* String data */
             lineIndex++;
-            while (lineIndex != length && (c = *(line + lineIndex)) != '\"' && isascii(c) && c != EOF && hasError == false) {
+            while (lineIndex != length && (c = *(line + lineIndex)) != '\"' && c != EOF && hasError == false) {
                 hasError = addData(pfp, c);
                 lineIndex++;
             }
@@ -91,7 +91,7 @@ Boolean analyzeStringLine(ParsedFile *pfp, const char *line, const int length, i
     hasError = false;
     lineIndex = clearWhiteCharacters(line, length, lineIndex);
     if (lineIndex != length && (c = *(line + lineIndex)) == '\"') {
-        while (lineIndex != length && (c = *(line + lineIndex)) != '\"' && isascii(c) && c != EOF && hasError == false) {
+        while (lineIndex != length && (c = *(line + lineIndex)) != '\"' && c != EOF && hasError == false) {
             hasError = addData(pfp, c);
             lineIndex++;
         }
@@ -109,11 +109,15 @@ Boolean analyzeStringLine(ParsedFile *pfp, const char *line, const int length, i
 /* Analyze an entry line of inner label */
 Boolean analyzeEntryLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
 {
+    lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
+    lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
 
 }
 
 /* Analyze an extern line */
 Boolean analyzeExternLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
 {
+    lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
+    lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
 
 }

@@ -2,7 +2,7 @@
 
 all: assembler
 
-assembler: main.o assembler.o lineAnalyzer.o parser.o fileHandler.o utils.o errors.o memoryManager.o
+assembler: main.o assembler.o lineAnalyzer.o dataLine.o parser.o fileHandler.o utils.o errors.o memoryManager.o
 	gcc -ansi -Wall -pedantic -o assembler main.o assembler.o lineAnalyzer.o parser.o fileHandler.o utils.o errors.o memoryManager.o
 
 main.o: main.c assembler.h memoryManager.h errors.h

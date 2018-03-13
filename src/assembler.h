@@ -23,21 +23,38 @@ typedef enum Opcode {
     stop /* Stop the program */
 } Opcode;
 
+/* An instruction line */
 typedef struct Instruction {
-    Opcode oc;
-    struct Instruction *next;
+    Opcode oc; /* Opcode of the instruction */
+    struct Instruction *next; /* Next instruction on the list */
 } Instruction;
 
+/* A data line */
 typedef struct Data {
-    int value;
-    struct Data *next;
+    int value; /* The value of this data */
+    struct Data *next; /* Next data on the list */
 } Data;
 
+/* Label counter's type */
+typedef enum CounterType {
+    IC, /* Instruction lines counter */
+    DC /* Data lines counter */
+} CounterType;
+
+typedef struct LineCounter {
+    int counter; /* The line position */
+    CounterType ct; /* Line counter's type */
+    struct LineCounter *next; /* The next line on the list */
+} LineCounter;
+
+/* A label */
 typedef struct Label {
-    char *name;
-    int counter;
-    Boolean hasEntry;
-    struct Label *next;
+    char *name; /* The label's name */
+    int counter; /* The label position */
+    CounterType ct; /* Label counter's type */
+    Boolean hasEntry; /* Is this label has an entry line */
+    LineCounter *lines; /* Line with this label */
+    struct Label *next; /* Next label on the list */
 } Label;
 
 /* Parsed assembly file */

@@ -3,9 +3,8 @@
 #include "dataLine.h"
 #include "errors.h"
 
-static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int
-endOfWord, Boolean *hasLabel);
-static Boolean _analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
+Boolean analyzeGuidanceLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord, Boolean *hasLabel);
+Boolean analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
 
 /* Analyze the given line */
 Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
@@ -34,9 +33,9 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
     }
 
     if (isGuidanceLine(line, startOfWord)) {
-        hasError = _analyzeGuidanceLine(pfp, line, length, lineIndex, startOfWord, endOfWord, &hasLabel);
+        hasError = analyzeGuidanceLine(pfp, line, length, lineIndex, startOfWord, endOfWord, &hasLabel);
     } else {
-        hasError = _analyzeInstructionLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
+        hasError = analyzeInstructionLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
     }
 
 
@@ -45,7 +44,7 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
 }
 
 /* Analyze a guidance line */
-static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord, Boolean *hasLabel)
+Boolean analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord, Boolean *hasLabel)
 {
     Boolean hasError;
 
@@ -79,7 +78,7 @@ static Boolean _analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int
 }
 
 /* Analyze an instruction line */
-static Boolean _analyzeInstructionLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
+Boolean analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord)
 {
     Boolean hasError;
 
