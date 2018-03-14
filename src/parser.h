@@ -11,6 +11,23 @@
 #define GUIDANCE_ENTRY ".entry"
 #define GUIDANCE_EXTERN ".extern"
 
+#define INSTRUCTION_MOV "mov"
+#define INSTRUCTION_CMP "cmp"
+#define INSTRUCTION_ADD "add"
+#define INSTRUCTION_SUB "sub"
+#define INSTRUCTION_NOT "not"
+#define INSTRUCTION_CLR "clr"
+#define INSTRUCTION_LEA "lea"
+#define INSTRUCTION_INC "inc"
+#define INSTRUCTION_DEC "dec"
+#define INSTRUCTION_JMP "jmp"
+#define INSTRUCTION_BNE "bne"
+#define INSTRUCTION_RED "red"
+#define INSTRUCTION_PRN "prn"
+#define INSTRUCTION_JSR "jsr"
+#define INSTRUCTION_RTS "rts"
+#define INSTRUCTION_STOP "stop"
+
 /* Parse a given source file */
 ParsedFile *parseFile(FILE *fp, char *fName);
 

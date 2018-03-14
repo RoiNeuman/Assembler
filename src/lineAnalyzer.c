@@ -1,6 +1,7 @@
 #include <string.h>
 #include "lineAnalyzer.h"
 #include "dataLine.h"
+#include "instructionLine.h"
 #include "errors.h"
 
 Boolean analyzeGuidanceLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord, Boolean *hasLabel);
@@ -94,6 +95,56 @@ Boolean analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, in
     Boolean hasError;
 
     hasError = false;
+
+    if (0 == strncmp(line + startOfWord, INSTRUCTION_MOV, strlen(INSTRUCTION_MOV))) {
+        /* MOVe instruction */
+        hasError = twoOperandInstruction(pfp, line, length, lineIndex, mov);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_CMP, strlen(INSTRUCTION_CMP))) {
+        /* CoMPare instruction */
+        hasError = twoOperandInstruction(pfp, line, length, lineIndex, cmp);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_ADD, strlen(INSTRUCTION_ADD))) {
+        /* ADD instruction */
+        hasError = twoOperandInstruction(pfp, line, length, lineIndex, add);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_SUB, strlen(INSTRUCTION_SUB))) {
+        /* SUBtract instruction */
+        hasError = twoOperandInstruction(pfp, line, length, lineIndex, sub);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_NOT, strlen(INSTRUCTION_NOT))) {
+        /* NOT instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, not);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_CLR, strlen(INSTRUCTION_CLR))) {
+        /* CLeaR instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, clr);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_LEA, strlen(INSTRUCTION_LEA))) {
+        /* Load Effective Address */
+        hasError = twoOperandInstruction(pfp, line, length, lineIndex, lea);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_INC, strlen(INSTRUCTION_INC))) {
+        /* INCrease instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, inc);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_DEC, strlen(INSTRUCTION_DEC))) {
+        /* DECrease instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, dec);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_JMP, strlen(INSTRUCTION_JMP))) {
+        /* Jump instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, jmp);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_BNE, strlen(INSTRUCTION_BNE))) {
+        /* Branch if Not Equal instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, bne);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_RED, strlen(INSTRUCTION_RED))) {
+        /* REeD instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, red);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_PRN, strlen(INSTRUCTION_PRN))) {
+        /* PRiNt instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, prn);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_JSR, strlen(INSTRUCTION_JSR))) {
+        /* Jump to SubRoutine instruction */
+        hasError = singleOperandInstruction(pfp, line, length, lineIndex, jsr);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_RTS, strlen(INSTRUCTION_RTS))) {
+        /* ReTurn from Subroutine instruction */
+        hasError = zeroOperandInstruction(pfp, line, length, lineIndex, rts);
+    } else if (0 == strncmp(line + startOfWord, INSTRUCTION_STOP, strlen(INSTRUCTION_STOP))) {
+        /* STOP instruction */
+        hasError = zeroOperandInstruction(pfp, line, length, lineIndex, stop);
+    }
 
     return hasError;
 }
