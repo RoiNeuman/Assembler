@@ -38,6 +38,7 @@ int readFileLine(char **line, FILE *fp, const char *fName);
 /* Checking white character */
 Boolean isWhiteCharacter(int c);
 
+/* Checking white character or comma */
 Boolean isWhiteCharOrComma(int c);
 
 /* Checking if the given line is a comment line */

@@ -11,34 +11,45 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
 {
     int lineIndex, startOfWord, endOfWord, startOfLabel = 0, endOfLabel = 0;
     Boolean hasLabel, hasError;
+    CounterType ct;
 
     lineIndex = clearWhiteCharacters(line, length, FIRST_INDEX);
 
-    if (lineIndex == length) { /* End of Line */
+    /* Skipping empty line */
+    if (lineIndex == length) {
         return false;
     }
 
     lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
 
-    if (isComment(line, startOfWord)) { /* Skipping comment line */
+    /* Skipping comment line */
+    if (isComment(line, startOfWord)) {
         return false;
     }
 
-    if ((hasLabel = isLineLabel(line, startOfWord, endOfWord))) { /* Marking label if any */
+    /* Marking label if any */
+    if ((hasLabel = isLineLabel(line, startOfWord, endOfWord))) {
         startOfLabel = startOfWord;
         endOfLabel = endOfWord - 1;
         lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
         lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
-
     }
 
+    /* Checking what is the line's type */
     if (isGuidanceLine(line, startOfWord)) {
+        /* Guidance line (data line) */
+        ct = DC;
         hasError = analyzeGuidanceLine(pfp, line, length, lineIndex, startOfWord, endOfWord, &hasLabel);
     } else {
+        /* Instruction line */
+        ct = IC;
         hasError = analyzeInstructionLine(pfp, line, length, lineIndex, startOfWord, endOfWord);
     }
 
-
+    /* Adding the label to the parsed file struct */
+    if (hasError == false && hasLabel) {
+        hasError = addLabel(pfp, line, startOfLabel, endOfLabel, ct, false, false);
+    }
 
     return hasError;
 }
