@@ -27,6 +27,7 @@ typedef enum Error {
 /* A node in the error list */
 typedef struct ErrorNode {
     Error error; /* The relevant error */
+    int line; /* The line number of this error */
     const char *msg; /* possible message */
     struct ErrorNode *next; /* The next error in the list */
 } ErrorNode;
@@ -39,5 +40,11 @@ void printAllErrors();
 
 /* Log a new error into the error list */
 void logError(Error e, const char *msg);
+
+/* Initialze the error logger */
+void initErrorLogger();
+
+/* Advance the logged line in the error logger */
+void incrementErrorLoggerLine();
 
 #endif

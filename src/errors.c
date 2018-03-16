@@ -3,64 +3,65 @@
 #include "memoryManager.h"
 
 static ErrorNode *head; /* The error list head pointer */
+static int line;
 
 /* Filter and print single error */
 void printError(Error e, const char *msg)
 {
     switch (e) {
         case outOfMemory:
-            fprintf(stderr, "Error: out of memory.\n");
+            fprintf(stderr, "Line %d, Error: out of memory.\n", line);
             break;
         case fileNotAvailable:
-            fprintf(stderr, "Error: file not available.\n");
+            fprintf(stderr, "Line %d, Error: file not available.\n", line);
             break;
         case fileNotClose:
-            fprintf(stderr, "Error: fail to close file.\n");
+            fprintf(stderr, "Line %d, Error: fail to close file.\n", line);
             break;
         case readFromFileError:
-            fprintf(stderr, "Error: reading from a file was failed.\n");
+            fprintf(stderr, "Line %d, Error: reading from a file was failed.\n", line);
             break;
         case labelWithEntry:
-            fprintf(stderr, "Warning: Label before .entry line.\n");
+            fprintf(stderr, "Line %d, Warning: Label before .entry line.\n", line);
             break;
         case labelWithExtern:
-            fprintf(stderr, "Warning: Label before .extern line.\n");
+            fprintf(stderr, "Line %d, Warning: Label before .extern line.\n", line);
             break;
         case undefinedData:
-            fprintf(stderr, "Error: Undefined character in .data line.\n");
+            fprintf(stderr, "Line %d, Error: Undefined character in .data line.\n", line);
             break;
         case labelStartPosition:
-            fprintf(stderr, "Error: Label not the at the start of the line.\n");
+            fprintf(stderr, "Line %d, Error: Label not the at the start of the line.\n", line);
             break;
         case labelFirstChar:
-            fprintf(stderr, "Error: Label not start with a letter.\n");
+            fprintf(stderr, "Line %d, Error: Label not start with a letter.\n", line);
             break;
         case labelMaxLength:
-            fprintf(stderr, "Error: Label extends 30 characters.\n");
+            fprintf(stderr, "Line %d, Error: Label extends 30 characters.\n", line);
             break;
         case missedQuotationMark:
-            fprintf(stderr, "Error: Missing quotation mark in string input.\n");
+            fprintf(stderr, "Line %d, Error: Missing quotation mark in string input.\n", line);
             break;
         case emptyEntryLine:
-            fprintf(stderr, "Error: Empty entry line.\n");
+            fprintf(stderr, "Line %d, Error: Empty entry line.\n", line);
             break;
         case emptyExternLine:
-            fprintf(stderr, "Error: Empty extern line.\n");
+            fprintf(stderr, "Line %d, Error: Empty extern line.\n", line);
             break;
         case missSourceOperand:
-            fprintf(stderr, "Error: Missing a source operand in instruction line.\n");
+            fprintf(stderr, "Line %d, Error: Missing a source operand in instruction line.\n", line);
             break;
         case missDestinationOperand:
-            fprintf(stderr, "Error: Missing a destination operand in instruction line.\n");
+            fprintf(stderr, "Line %d, Error: Missing a destination operand in instruction line.\n", line);
             break;
         case undefinedInstruction:
-            fprintf(stderr, "Error: Undefined instruction.\n");
+            fprintf(stderr, "Line %d, Error: Undefined instruction.\n", line);
             break;
         case undefinedSourceOperand:
-            fprintf(stderr, "Error: Undefined source operand in an instruction line.\n");
+            fprintf(stderr, "Line %d, Error: Undefined source operand in an instruction line.\n", line);
             break;
         case undefinedDestinationOperand:
-            fprintf(stderr, "Error: Undefined destination operand in an instruction line.\n");
+            fprintf(stderr, "Line %d, Error: Undefined destination operand in an instruction line.\n", line);
             break;
         case none:
         default:
@@ -108,6 +109,7 @@ void logError(Error e, const char *msg)
     }
 
     newError->error = e;
+    newError->line = 
     newError->msg = msg;
     newError->next = NULL;
 
@@ -124,4 +126,17 @@ void logError(Error e, const char *msg)
         }
         prev->next = newError;
     }
+}
+
+/* Initialze the error logger */
+void initErrorLogger()
+{
+    head = NULL;
+    line = -1;
+}
+
+/* Advance the logged line in the error logger */
+void incrementErrorLoggerLine()
+{
+    line++;
 }

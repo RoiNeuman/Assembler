@@ -12,6 +12,7 @@ void runAssemblerOnFile(char *fName)
     FILE *fp;
     ParsedFile *pfp;
 
+    initErrorLogger();
     fp = getAssemblyFile(fName);
     if (fp != NULL) {
         pfp = parseFile(fp, fName);
@@ -238,7 +239,7 @@ Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
 
 Boolean addSingleOperandInstruction(pfp, op, operand)
 {
-    
+
 }
 
 Boolean addTwoOperandInstruction(pfp, op, sourceOperand, destinationOperand)

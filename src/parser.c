@@ -33,6 +33,7 @@ static int _parseLine(ParsedFile *pfp, FILE *fp)
 
     line = NULL;
     length = readFileLine(&line, fp, pfp->fName);
+    incrementErrorLoggerLine();
 
     if (length == READING_ERROR || length == READING_EOF) {
         return length;
