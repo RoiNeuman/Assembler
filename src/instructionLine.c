@@ -63,7 +63,7 @@ Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int
 
     /* Adding instruction */
     if (hasError == false && sourceOperand != NULL && destinationOperand != NULL) {
-        hasError = addSingleOperandInstruction(pfp, op, sourceOperand, destinationOperand);
+        hasError = addTwoOperandInstruction(pfp, op, sourceOperand, destinationOperand);
     }
 
     return hasError;

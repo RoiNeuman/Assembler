@@ -235,3 +235,13 @@ Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
     /* No errors */
     return false;
 }
+
+Boolean addSingleOperandInstruction(pfp, op, operand)
+{
+    
+}
+
+Boolean addTwoOperandInstruction(pfp, op, sourceOperand, destinationOperand)
+{
+
+}
