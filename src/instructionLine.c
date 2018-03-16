@@ -1,6 +1,9 @@
 #include "instructionLine.h"
+#include "parser.h"
+#include "errors.h"
 
-Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode oc)
+/* Analyze two operands instruction line */
+Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode op, const char *name)
 {
     Boolean hasError;
 
@@ -10,20 +13,38 @@ Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int
     return hasError;
 }
 
-Boolean singleOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode oc)
+/* Analyze single operand instruction line */
+Boolean singleOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode op, const char *name)
 {
     Boolean hasError;
+    int startOfWord, endOfWord;
+    Operand *operand;
 
     hasError = false;
+    lineIndex = clearWhiteCharacters(line, length, lineIndex);
+    readNextWord(line, lineIndex, &startOfWord, &endOfWord);
+
+    /* Checking for missing operand */
+    if (endOfWord - startOfWord == 0) {
+        logError(missOperand, name);
+        hasError = true;
+    }
+
+    /* Analysing operand */
+    if (hasError == false) {
+        hasError = analyzeOperand(op, line, startOfWord, endOfWord, &operand);
+    }
+
+    /* Adding instruction */
+    if (hasError == false) {
+        hasError = addSingleOperandInstruction(pfp, op, operand);
+    }
 
     return hasError;
 }
 
-Boolean zeroOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode oc)
+/* Analyze no operands instruction line */
+Boolean noOperandsInstruction(ParsedFile *pfp, Opcode op)
 {
-    Boolean hasError;
-
-    hasError = false;
-
-    return hasError;
+    return addNoOperandsInstruction(pfp, op);
 }

@@ -14,9 +14,9 @@ Boolean analyzeStructLine(ParsedFile *pfp, const char *line, int length, int lin
 Boolean analyzeStringLine(ParsedFile *pfp, const char *line, int length, int lineIndex);
 
 /* Analyze an entry line of inner label */
-Boolean analyzeEntryLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
+Boolean analyzeEntryLine(ParsedFile *pfp, const char *line, int length, int lineIndex);
 
 /* Analyze an extern line */
-Boolean analyzeExternLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord);
+Boolean analyzeExternLine(ParsedFile *pfp, const char *line, int length, int lineIndex);
 
 #endif

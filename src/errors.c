@@ -41,6 +41,15 @@ void printError(Error e, const char *msg)
         case missedQuotationMark:
             fprintf(stderr, "Error: Missing quotation mark in string input.\n");
             break;
+        case emptyEntryLine:
+            fprintf(stderr, "Error: Empty entry line.\n");
+            break;
+        case emptyExternLine:
+            fprintf(stderr, "Error: Empty extern line.\n");
+            break;
+        case missOperand:
+            fprintf(stderr, "Error: Missing an operand in instruction line.\n");
+            break;
         case none:
         default:
             break;

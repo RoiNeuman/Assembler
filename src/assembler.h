@@ -23,9 +23,32 @@ typedef enum Opcode {
     stop /* Stop the program */
 } Opcode;
 
+/* Types of operands */
+typedef enum OperandType {
+    immediateAddressing, /* Contain the operand itself */
+    directAddressing, /* A label to the operand */
+    structAddressing, /* The operand is a property of a struct */
+    registerAddressing /* The operand is a register */
+} OperandType;
+
+/* An operand of instruction */
+typedef struct Operand {
+    OperandType type; /* The type of the operand */
+    struct Operand *next; /* Next operand on the list */
+} Operand;
+
+/* Types of instructions */
+typedef enum InstructionType {
+    noOperands, /* Instruction with no operands */
+    singleOperand, /* Instruction with single operand */
+    twoOperands /* Instruction with two operands */
+} InstructionType;
+
 /* An instruction line */
 typedef struct Instruction {
     Opcode oc; /* Opcode of the instruction */
+    InstructionType instructionType; /* The instruction type */
+    Operand *operand; /* Operands with this instruction */
     struct Instruction *next; /* Next instruction on the list */
 } Instruction;
 
@@ -83,5 +106,8 @@ Boolean addLabel(ParsedFile *pfp, const char *line, int start, int end, CounterT
 
 /* Add new line counter to a label */
 Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct);
+
+/* Add new no operands instruction to the instructions list */
+Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op);
 
 #endif

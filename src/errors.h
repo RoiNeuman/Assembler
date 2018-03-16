@@ -14,7 +14,10 @@ typedef enum Error {
     labelStartPosition,
     labelFirstChar,
     labelMaxLength,
-    missedQuotationMark
+    missedQuotationMark,
+    emptyEntryLine,
+    emptyExternLine,
+    missOperand
 } Error;
 
 /* A node in the error list */

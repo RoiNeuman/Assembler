@@ -107,25 +107,45 @@ Boolean analyzeStringLine(ParsedFile *pfp, const char *line, const int length, i
 }
 
 /* Analyze an entry line of inner label */
-Boolean analyzeEntryLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
+Boolean analyzeEntryLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
 {
-    lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
+    int startOfWord, endOfWord;
+
+    lineIndex = clearWhiteCharacters(line, length, lineIndex);
     readNextWord(line, lineIndex, &startOfWord, &endOfWord);
-    if (endOfWord - startOfWord != 0 && isLabel(line, startOfWord, endOfWord)) {
+
+    /* Checking if it is an empty line */
+    if (endOfWord - startOfWord == 0) {
+        logError(emptyEntryLine, NULL);
+        return true;
+    }
+
+    if (isLabel(line, startOfWord, endOfWord)) {
         /* This is a label */
         return addLabel(pfp, line, startOfWord, endOfWord, DC, true, false);
     }
-    return false;
+
+    return true;
 }
 
 /* Analyze an extern line */
-Boolean analyzeExternLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord)
+Boolean analyzeExternLine(ParsedFile *pfp, const char *line, const int length, int lineIndex)
 {
-    lineIndex = clearWhiteCharacters(line, length, endOfWord + 1);
+    int startOfWord, endOfWord;
+
+    lineIndex = clearWhiteCharacters(line, length, lineIndex);
     readNextWord(line, lineIndex, &startOfWord, &endOfWord);
-    if (endOfWord - startOfWord != 0 && isLabel(line, startOfWord, endOfWord)) {
+
+    /* Checking if it is an empty line */
+    if (endOfWord - startOfWord == 0) {
+        logError(emptyExternLine, NULL);
+        return true;
+    }
+
+    if (isLabel(line, startOfWord, endOfWord)) {
         /* This is a label */
         return addLabel(pfp, line, startOfWord, endOfWord, DC, false, true);
     }
-    return false;
+
+    return true;
 }

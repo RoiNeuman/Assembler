@@ -74,7 +74,11 @@ Boolean addData(ParsedFile *pfp, int data)
         }
         prev->next = newData;
     }
-    pfp->DC++; /* Incrementing the data counter */
+
+    /* Incrementing the data counter */
+    pfp->DC++;
+
+    /* No errors */
     return false;
 }
 
@@ -144,6 +148,7 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
         newLabel->counter = LABEL_WITHOUT_DECLERATION;
     }
 
+    /* Adding the new struct properties */
     newLabel->hasEntry = (hasEntry ? hasEntry : newLabel->hasEntry);
     newLabel->hasExtern = (hasExtern ? hasExtern : newLabel->hasExtern);
     newLabel->next = NULL;
@@ -154,6 +159,8 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
     } else {
         pfp->lList = newLabel;
     }
+
+    /* Marking this line for this label */
     return addLineCounter(pfp, newLabel, ct);
 }
 
@@ -186,5 +193,45 @@ Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct)
             lc->ct = DC;
             break;
     }
+
+    /* No errors */
+    return false;
+}
+
+/* Add new no operands instruction to the instructions list */
+Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
+{
+    Instruction *newInstruction, *prev;
+
+    /* Allocating memory for the new instruction */
+    newInstruction = (Instruction *)autoDispMalloc(sizeof(Instruction));
+
+    if (newInstruction == NULL) {
+        logError(outOfMemory, "Adding no operands instruction.");
+        return true;
+    }
+
+    /* Adding the new struct properties */
+    newInstruction->oc = op;
+    newInstruction->instructionType = noOperands;
+    newInstruction->operand = NULL;
+    newInstruction->next = NULL;
+
+    /* Adding the new instruction to the instructions list */
+    if (pfp->iList == NULL) {
+        /* First instruction */
+        pfp->iList = newInstruction;
+    } else {
+        prev = pfp->iList;
+        while (prev->next != NULL) {
+            prev = prev->next;
+        }
+        prev->next = newInstruction;
+    }
+
+    /* Incrementing the instructions counter */
+    pfp->IC++;
+
+    /* No errors */
     return false;
 }

@@ -4,10 +4,13 @@
 #include "assembler.h"
 #include "utils.h"
 
-Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode oc);
+/* Analyze two operands instruction line */
+Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode op, const char *name);
 
-Boolean singleOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode oc);
+/* Analyze single operand instruction line */
+Boolean singleOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode op, const char *name);
 
-Boolean zeroOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode oc);
+/* Analyze no operands instruction line */
+Boolean noOperandsInstruction(ParsedFile *pfp, Opcode op);
 
 #endif
