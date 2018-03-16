@@ -144,6 +144,9 @@ Boolean analyzeInstructionLine(ParsedFile *pfp, const char *line, const int leng
     } else if (0 == strncmp(line + startOfWord, INSTRUCTION_STOP, strlen(INSTRUCTION_STOP))) {
         /* STOP instruction */
         hasError = noOperandsInstruction(pfp, stop);
+    } else {
+        logError(undefinedInstruction, NULL);
+        pfp->hasError = true;
     }
 
     return hasError;

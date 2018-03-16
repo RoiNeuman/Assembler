@@ -47,8 +47,20 @@ void printError(Error e, const char *msg)
         case emptyExternLine:
             fprintf(stderr, "Error: Empty extern line.\n");
             break;
-        case missOperand:
-            fprintf(stderr, "Error: Missing an operand in instruction line.\n");
+        case missSourceOperand:
+            fprintf(stderr, "Error: Missing a source operand in instruction line.\n");
+            break;
+        case missDestinationOperand:
+            fprintf(stderr, "Error: Missing a destination operand in instruction line.\n");
+            break;
+        case undefinedInstruction:
+            fprintf(stderr, "Error: Undefined instruction.\n");
+            break;
+        case undefinedSourceOperand:
+            fprintf(stderr, "Error: Undefined source operand in an instruction line.\n");
+            break;
+        case undefinedDestinationOperand:
+            fprintf(stderr, "Error: Undefined destination operand in an instruction line.\n");
             break;
         case none:
         default:

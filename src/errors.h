@@ -17,7 +17,11 @@ typedef enum Error {
     missedQuotationMark,
     emptyEntryLine,
     emptyExternLine,
-    missOperand
+    missSourceOperand,
+    missDestinationOperand,
+    undefinedInstruction,
+    undefinedSourceOperand,
+    undefinedDestinationOperand
 } Error;
 
 /* A node in the error list */
