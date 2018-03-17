@@ -11,7 +11,7 @@ ParsedFile *parseFile(FILE *fp, char *fName)
     ParsedFile *pfp;
     int lineLength, lineCounter;
 
-    lineCounter = 0;
+    lineCounter = 1;
     /* Allocating memory for the ParsedFile object */
     pfp = initializeParsedFile(fName);
 
