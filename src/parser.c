@@ -18,6 +18,7 @@ ParsedFile *parseFile(FILE *fp, char *fName)
     do { /* Parse all the file's lines */
         lineCounter++;
         setSourceFileLine(lineCounter);
+        incrementErrorLoggerLine();
         lineLength = parseLine(pfp, fp);
     } while (lineLength != READING_ERROR && lineLength != READING_EOF);
 
@@ -37,7 +38,6 @@ int parseLine(ParsedFile *pfp, FILE *fp)
 
     line = NULL;
     length = readFileLine(&line, fp, pfp->fName);
-    incrementErrorLoggerLine();
 
     if (length == READING_ERROR || length == READING_EOF) {
         return length;

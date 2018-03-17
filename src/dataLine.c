@@ -143,7 +143,7 @@ Boolean analyzeExternLine(ParsedFile *pfp, const char *line, const int length, i
     /* Checking if it is an empty line */
     if (endOfWord - startOfWord == 0) {
         logError(emptyExternLine, NULL);
-        return true;
+        pfp->hasError = true;
     }
 
     if (isLabel(line, startOfWord, endOfWord)) {

@@ -134,7 +134,6 @@ Boolean isLabel(const char *line, int start, int end)
     Boolean _isLabel;
     _isLabel = true;
     if (!isalpha(*(line + start))) {
-        logError(labelFirstChar, NULL);
         _isLabel = false;
     }
     if (end - start >= LABEL_MAX_LENGTH) {
@@ -151,6 +150,10 @@ Boolean isLineLabel(const char *line, int start, int end)
     _isLabel = false;
     if (*(line + end) != ':' && isLabel(line, start, end)) {
         _isLabel = true;
+        if (!isalpha(*(line + start))) {
+            logError(labelFirstChar, NULL);
+            _isLabel = false;
+        }
         if (start != LABEL_START_POSITION) {
             logError(labelStartPosition, NULL);
             _isLabel = false;
