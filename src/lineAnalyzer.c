@@ -4,7 +4,7 @@
 #include "instructionLine.h"
 #include "errors.h"
 
-Boolean analyzeGuidanceLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, int endOfWord, Boolean *hasLabel);
+Boolean analyzeGuidanceLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord, Boolean *hasLabel);
 Boolean analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, int lineIndex, int startOfWord);
 
 /* Analyze the given line */
@@ -40,7 +40,7 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
     if (isGuidanceLine(line, startOfWord)) {
         /* Guidance line (data line) */
         ct = DC;
-        hasError = analyzeGuidanceLine(pfp, line, length, lineIndex, startOfWord, endOfWord, &hasLabel);
+        hasError = analyzeGuidanceLine(pfp, line, length, lineIndex, startOfWord, &hasLabel);
     } else {
         /* Instruction line */
         ct = IC;
@@ -56,7 +56,7 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
 }
 
 /* Analyze a guidance line */
-Boolean analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, int endOfWord, Boolean *hasLabel)
+Boolean analyzeGuidanceLine(ParsedFile *pfp, const char *line, const int length, int lineIndex, int startOfWord, Boolean *hasLabel)
 {
     Boolean hasError;
 
