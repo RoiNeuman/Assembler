@@ -26,7 +26,9 @@ typedef enum Error {
     structOperandWithoutName,
     structOperandWithoutProperty,
     structOperandPropertyNotNumber,
-    illegalRegisterOperand
+    illegalRegisterOperand,
+    labelNotFound,
+    structNotFound
 } Error;
 
 /* A node in the error list */
@@ -38,7 +40,7 @@ typedef struct ErrorNode {
 } ErrorNode;
 
 /* Filter and print single error */
-void printError(Error e, const char *msg);
+void printError(Error e, const char *msg, int _line);
 
 /* Printing all errors */
 void printAllErrors();
@@ -51,5 +53,8 @@ void initErrorLogger();
 
 /* Advance the logged line in the error logger */
 void incrementErrorLoggerLine();
+
+/* Set the logged line to a given number */
+void setErrorLoggerLine(int number);
 
 #endif

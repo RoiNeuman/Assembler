@@ -9,12 +9,15 @@ int parseLine(ParsedFile *pfp, FILE *fp);
 ParsedFile *parseFile(FILE *fp, char *fName)
 {
     ParsedFile *pfp;
-    int lineLength;
+    int lineLength, lineCounter;
 
+    lineCounter = 0;
     /* Allocating memory for the ParsedFile object */
     pfp = initializeParsedFile(fName);
 
     do { /* Parse all the file's lines */
+        lineCounter++;
+        setSourceFileLine(lineCounter);
         lineLength = parseLine(pfp, fp);
     } while (lineLength != READING_ERROR && lineLength != READING_EOF);
 

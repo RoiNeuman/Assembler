@@ -17,16 +17,13 @@ typedef enum Boolean {
 } Boolean;
 
 /* Convert decimal number to binary number */
-int decimalToBinary(int number);
+unsigned long decimalToBinary(int number);
 
 /* Convert binary number to decimal number */
-int binaryToDecimal(int number);
+int binaryToDecimal(unsigned long number);
 
-/* Convert mozar number to binary number */
-int mozarToBinary(char *number);
-
-/* Convert binary number to mozar number */
-char *binaryToMozar(int number);
+/* Convert binary number to positive decimal number */
+unsigned int binaryToUnsignedDecimal(unsigned long number);
 
 /*
  * Strings concatenation.

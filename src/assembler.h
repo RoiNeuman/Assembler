@@ -55,12 +55,14 @@ typedef struct Instruction {
     InstructionType instructionType; /* The instruction type */
     Operand *source; /* Source operands of this instruction */
     Operand *destination; /* Destination operands with of instruction */
+    int line; /* The line in the source file */
     struct Instruction *next; /* Next instruction on the list */
 } Instruction;
 
 /* A data line */
 typedef struct Data {
     int value; /* The value of this data */
+    int line; /* The line in the source file */
     struct Data *next; /* Next data on the list */
 } Data;
 
@@ -124,5 +126,8 @@ Boolean addSingleOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pDestin
 
 /* Add new instruction with two operands to the instruction list */
 Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSource, Operand *pDestination);
+
+/* Set the source file line to a given number */
+void setSourceFileLine(int number);
 
 #endif

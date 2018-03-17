@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "assembler.h"
+#include "resultFilesHandler.h"
 #include "fileHandler.h"
 #include "parser.h"
 #include "memoryManager.h"
 #include "errors.h"
+
+static int line;
 
 /* Run the assembler on a file */
 void runAssemblerOnFile(char *fName)
@@ -12,13 +15,15 @@ void runAssemblerOnFile(char *fName)
     FILE *fp;
     ParsedFile *pfp;
 
+    line = 0;
     initErrorLogger();
     fp = getAssemblyFile(fName);
     if (fp != NULL) {
         pfp = parseFile(fp, fName);
         closeFile(fp, fName);
-        if (pfp != NULL) {
-            /* createResultFile(pParsed); */
+        if (pfp != NULL && pfp->hasError == false) {
+            /* Legal parsed file */
+            createResultFiles(pfp);
         }
     }
 }
@@ -62,6 +67,7 @@ Boolean addData(ParsedFile *pfp, int data)
 
     /* Adding the new struct properties */
     newData->value = data;
+    newData->line = line;
     newData->next = NULL;
 
     /* Adding the new data struct to the data list */
@@ -222,6 +228,7 @@ Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
     newInstruction->instructionType = noOperands;
     newInstruction->source = NULL;
     newInstruction->destination = NULL;
+    newInstruction->line = line;
     newInstruction->next = NULL;
 
     /* Adding the new instruction to the instructions list */
@@ -279,6 +286,7 @@ Boolean addSingleOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pDestin
     newInstruction->instructionType = singleOperand;
     newInstruction->source = NULL;
     newInstruction->destination = pDestination;
+    newInstruction->line = line;
     newInstruction->next = NULL;
 
     /* Adding the new instruction to the instructions list */
@@ -322,6 +330,7 @@ Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSource, O
     newInstruction->instructionType = singleOperand;
     newInstruction->source = pSource;
     newInstruction->destination = pDestination;
+    newInstruction->line = line;
     newInstruction->next = NULL;
 
     /* Adding the new instruction to the instructions list */
@@ -341,10 +350,18 @@ Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSource, O
         pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND_STRUCT + IC_OPERAND_STRUCT;
     } else if (pSource->type == structAddressing || pDestination->type == structAddressing) {
         pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND + IC_OPERAND_STRUCT;
+    } else if (pSource->type == registerAddressing || pDestination->type == registerAddressing) {
+        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND;
     } else {
-        pfp->IC = pfp->IC + IC_OPERAND;
+        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND + IC_OPERAND;
     }
 
     /* No errors */
     return false;
+}
+
+/* Set the source file line to a given number */
+void setSourceFileLine(int number)
+{
+    line = number;
 }

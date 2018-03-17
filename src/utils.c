@@ -1,46 +1,73 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 #include "utils.h"
 #include "memoryManager.h"
 #include "errors.h"
 
 /* Convert decimal number to binary number */
-int decimalToBinary(int number)
+unsigned long decimalToBinary(int number)
 {
-    int binary = 0, i = 1;
+    unsigned long binary;
+    int i, absNum;
 
-    while (number != 0) {
-        binary += ((number % 2) * i);
-        number /= 2;
+    binary = 0;
+    i = 1;
+    absNum = abs(number);
+
+    while (absNum != 0) {
+        binary += ((absNum % 2) * i);
+        absNum /= 2;
         i *= 10;
     }
+
+    /* Handling negative number using the two's complement method */
+    if (number < 0) {
+        binary = ~binary;
+        binary++;
+    }
+
     return binary;
 }
 
 /* Convert binary number to decimal number */
-int binaryToDecimal(int number)
+int binaryToDecimal(unsigned long number)
 {
-    int decimal = 0, i = 1;
+    int decimal, i, sign;
+
+    decimal = 0;
+    i = 1;
+    sign = ((~(ULONG_MAX / 2)) & number) == 0 ? 1 : -1;
+
+    /* Removing the number sign */
+    number &= (ULONG_MAX / 2);
 
     while (number != 0) {
         decimal += ((number & 10) * i);
         number /= 10;
         i *= 2;
     }
+
+    return (decimal * sign);
+}
+
+/* Convert binary number to positive decimal number */
+unsigned int binaryToUnsignedDecimal(unsigned long number)
+{
+    unsigned int decimal, i;
+
+    decimal = 0;
+    i = 1;
+
+    while (number != 0) {
+        decimal += ((number & 10) * i);
+        number /= 10;
+        i *= 2;
+    }
+
     return decimal;
-}
-
-/* Convert mozar number to binary number */
-int mozarToBinary(char *number)
-{
-    return 0;
-}
-
-/* Convert binary number to mozar number */
-char *binaryToMozar(int number)
-{
-    return NULL;
 }
 
 /*

@@ -37,3 +37,13 @@ void closeFile(FILE *fp, char * fName)
         logError(fileNotClose, fName);
     }
 }
+
+/* Create file and fill it with given content */
+void createFileWithContent(const char *fName, const char *content)
+{
+    FILE *fp;
+
+    fp = fopen(fName, WRITE_MODE);
+    fputs(content, fp);
+    fclose(fp);
+}

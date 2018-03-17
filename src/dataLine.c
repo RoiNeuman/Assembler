@@ -56,6 +56,8 @@ Boolean analyzeStructLine(ParsedFile *pfp, const char *line, const int length, i
                 logError(missedQuotationMark, "Closing quotation mark.");
                 break;
             }
+            /* Adding terminating character */
+            hasError = addData(pfp, 0);
         } else if (c == '-' || c == '+' || isdigit(c)) { /* Number data */
             data = 0;
             sign = 1;
@@ -99,6 +101,8 @@ Boolean analyzeStringLine(ParsedFile *pfp, const char *line, const int length, i
             pfp->hasError = true;
             logError(missedQuotationMark, "Closing quotation mark.");
         }
+        /* Adding terminating character */
+        hasError = addData(pfp, 0);
     } else {
         pfp->hasError = true;
         logError(missedQuotationMark, "Opening quotation mark.");
