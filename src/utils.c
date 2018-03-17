@@ -175,7 +175,7 @@ char *strnchrRanged(const char *str, const int c, const int start, const int end
     for (i = start; i <= end && i < strlen(str) && *(str + i) != '\0'; ++i) {
         if (*(str + i) == c) {
             /* The first occurrence of c in str between the range of start and end */
-            return &(*(str + i));
+            return (char *)(str + i);
         }
     }
 

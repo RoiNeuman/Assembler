@@ -237,7 +237,7 @@ Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
     }
 
     /* Incrementing the instructions counter */
-    pfp->IC++;
+    pfp->IC = pfp->IC + IC_INSTRUCTION;
 
     /* No errors */
     return false;
@@ -264,11 +264,87 @@ Boolean createOperand(Operand **ppOperand, OperandType operandType, int iData, c
 /* Add new instruction with only one operand to the instruction list */
 Boolean addSingleOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pDestination)
 {
+    Instruction *newInstruction, *prev;
 
+    /* Allocating memory for the new instruction */
+    newInstruction = (Instruction *)autoDispMalloc(sizeof(Instruction));
+
+    if (newInstruction == NULL) {
+        logError(outOfMemory, "Adding no operands instruction.");
+        return true;
+    }
+
+    /* Adding the new struct properties */
+    newInstruction->oc = op;
+    newInstruction->instructionType = singleOperand;
+    newInstruction->source = NULL;
+    newInstruction->destination = pDestination;
+    newInstruction->next = NULL;
+
+    /* Adding the new instruction to the instructions list */
+    if (pfp->iList == NULL) {
+        /* First instruction */
+        pfp->iList = newInstruction;
+    } else {
+        prev = pfp->iList;
+        while (prev->next != NULL) {
+            prev = prev->next;
+        }
+        prev->next = newInstruction;
+    }
+
+    /* Incrementing the instructions counter */
+    if (pDestination->type == structAddressing) {
+        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND_STRUCT;
+    } else {
+        pfp->IC = pfp->IC + IC_OPERAND;
+    }
+
+    /* No errors */
+    return false;
 }
 
 /* Add new instruction with two operands to the instruction list */
-Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSourceOperand, Operand *pDestinationOperand)
+Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSource, Operand *pDestination)
 {
+    Instruction *newInstruction, *prev;
 
+    /* Allocating memory for the new instruction */
+    newInstruction = (Instruction *)autoDispMalloc(sizeof(Instruction));
+
+    if (newInstruction == NULL) {
+        logError(outOfMemory, "Adding no operands instruction.");
+        return true;
+    }
+
+    /* Adding the new struct properties */
+    newInstruction->oc = op;
+    newInstruction->instructionType = singleOperand;
+    newInstruction->source = pSource;
+    newInstruction->destination = pDestination;
+    newInstruction->next = NULL;
+
+    /* Adding the new instruction to the instructions list */
+    if (pfp->iList == NULL) {
+        /* First instruction */
+        pfp->iList = newInstruction;
+    } else {
+        prev = pfp->iList;
+        while (prev->next != NULL) {
+            prev = prev->next;
+        }
+        prev->next = newInstruction;
+    }
+
+    /* Incrementing the instructions counter */
+    if (pSource->type == structAddressing && pDestination->type == structAddressing) {
+        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND_STRUCT + IC_OPERAND_STRUCT;
+    } else if (pSource->type == structAddressing || pDestination->type == structAddressing) {
+        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND + IC_OPERAND_STRUCT;
+    } else {
+        pfp->IC = pfp->IC + IC_OPERAND;
+    }
+
+    /* No errors */
+    return false;
 }

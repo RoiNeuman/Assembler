@@ -124,7 +124,7 @@ void logError(Error e, const char *msg)
     }
 
     newError->error = e;
-    newError->line = 
+    newError->line = line;
     newError->msg = msg;
     newError->next = NULL;
 

@@ -3,6 +3,10 @@
 
 #include "utils.h"
 
+#define IC_INSTRUCTION 1
+#define IC_OPERAND 1
+#define IC_OPERAND_STRUCT 2
+
 /* Operation code */
 typedef enum Opcode {
     mov, /* Copy one operand to another */
@@ -119,6 +123,6 @@ Boolean createOperand(Operand **ppOperand, OperandType operandType, int iData, c
 Boolean addSingleOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pDestination);
 
 /* Add new instruction with two operands to the instruction list */
-Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSourceOperand, Operand *pDestinationOperand);
+Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSource, Operand *pDestination);
 
 #endif
