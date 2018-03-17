@@ -66,6 +66,18 @@ void printError(Error e, const char *msg)
         case illegalImmediateAddressingOperand:
             fprintf(stderr, "Line %d, Error: Illegal immediate addressing operand in an instruction line.\n", line);
             break;
+        case structOperandWithoutName:
+            fprintf(stderr, "Line %d, Error: Struct operand without a name.\n", line);
+            break;
+        case structOperandWithoutProperty:
+            fprintf(stderr, "Line %d, Error: Struct operand without a property.\n", line);
+            break;
+        case structOperandPropertyNotNumber:
+            fprintf(stderr, "Line %d, Error: Struct operand's property is not a number.\n", line);
+            break;
+        case illegalRegisterOperand:
+            fprintf(stderr, "Line %d, Error: Illegal register operand.\n", line);
+            break;
         case none:
         default:
             break;

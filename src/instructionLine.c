@@ -270,9 +270,26 @@ Boolean analyzeImmediateAddressingOperand(ParsedFile *pfp, const char *line, int
 Boolean analyzeDirectAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
+    char *label;
 
     hasError = false;
 
+    if (isLabel(line, startOfWord, endOfWord)) {
+        label = substring(line, startOfWord, (endOfWord - startOfWord + 1));
+
+        if (label == NULL) {
+            logError(outOfMemory, "Analyzing direct addressing operand.");
+            hasError = true;
+        }
+
+        if (hasError == false) {
+            hasError = addLabel(pfp, line, startOfWord, endOfWord, IC, false, false);
+        }
+
+        if (hasError == false) {
+            hasError = createOperand(ppOperand, directAddressing, 0, label);
+        }
+    }
 
     return hasError;
 }
@@ -281,8 +298,53 @@ Boolean analyzeDirectAddressingOperand(ParsedFile *pfp, const char *line, int st
 Boolean analyzeStructAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
+    char *dot, *label, *pProperty;
+    int property;
 
     hasError = false;
+    dot = NULL;
+    property = 0;
+
+    if (isLabel(line, startOfWord, endOfWord) && (dot = strnchrRanged(line, '.', startOfWord, endOfWord)) != NULL) {
+        if (dot == (line + startOfWord)) {
+            logError(structOperandWithoutName, NULL);
+            pfp->hasError = true;
+            return false;
+        }
+
+        if (dot == (line + endOfWord)) {
+            logError(structOperandWithoutProperty, NULL);
+            pfp->hasError = true;
+            return false;
+        }
+
+        pProperty = dot + 1;
+        while (pProperty != (line + endOfWord + 1)) {
+            if (isdigit(*pProperty)) {
+                property = ((property * 10) + ((*pProperty) - '0'));
+            } else {
+                logError(structOperandPropertyNotNumber, NULL);
+                pfp->hasError = true;
+                return false;
+            }
+            pProperty++;
+        }
+
+        label = substring(line, startOfWord, (int)(dot - (line + startOfWord)));
+
+        if (label == NULL) {
+            logError(outOfMemory, "Analyzing struct addressing operand.");
+            hasError = true;
+        }
+
+        if (hasError == false) {
+            hasError = addLabel(pfp, line, startOfWord, (startOfWord + (int)(dot - (line + startOfWord)) - 1), IC, false, false);
+        }
+
+        if (hasError == false) {
+            hasError = createOperand(ppOperand, structAddressing, property, label);
+        }
+    }
 
     return hasError;
 }
@@ -291,8 +353,21 @@ Boolean analyzeStructAddressingOperand(ParsedFile *pfp, const char *line, int st
 Boolean analyzeRegisterAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
+    int c;
 
     hasError = false;
+
+    if ((endOfWord - startOfWord) == 1 && *(line + startOfWord) == 'r' && isdigit(c = *(line + endOfWord))) {
+        /* This operand is a register */
+        if ('0' <= c && c <= '7') {
+            /* Legal register name */
+            hasError = createOperand(ppOperand, registerAddressing, (c - '0'), NULL);
+        } else {
+            logError(illegalRegisterOperand, NULL);
+            pfp->hasError = true;
+            return false;
+        }
+    }
 
     return hasError;
 }

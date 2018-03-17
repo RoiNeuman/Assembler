@@ -22,7 +22,11 @@ typedef enum Error {
     undefinedInstruction,
     undefinedSourceOperand,
     undefinedDestinationOperand,
-    illegalImmediateAddressingOperand
+    illegalImmediateAddressingOperand,
+    structOperandWithoutName,
+    structOperandWithoutProperty,
+    structOperandPropertyNotNumber,
+    illegalRegisterOperand
 } Error;
 
 /* A node in the error list */

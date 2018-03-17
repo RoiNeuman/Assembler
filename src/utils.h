@@ -28,8 +28,10 @@ int mozarToBinary(char *number);
 /* Convert binary number to mozar number */
 char *binaryToMozar(int number);
 
-/* Strings concatenation */
-/* Return new char pointer array with the length of both strings and with their content one after the other */
+/*
+ * Strings concatenation.
+ * Return new char pointer array with the length of both strings and with their content one after the other.
+*/
 char *stringConcat(const char *str1, const char *str2);
 
 /* Read a line from a file stream */
@@ -53,8 +55,16 @@ Boolean isLineLabel(const char *line, int start, int end);
 /* Checking whether the given line is a guidance line or instructive line */
 Boolean isGuidanceLine(const char *line, int start);
 
-/* Return new string which is a part of the given string starting at the start index in the given length */
-/* Return NULL if out of memory */
+/*
+ * Return new string which is a part of the given string starting at the start index in the given length.
+ * Return NULL if out of memory.
+*/
 char *substring(const char *string, int start, int length);
+
+/*
+ * Search for the first occurrence of character c in the given string str in the given range.
+ * Return NULL if not found.
+*/
+char *strnchrRanged(const char *str, int c, int start, int end);
 
 #endif
