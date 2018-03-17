@@ -141,7 +141,7 @@ Boolean analyzeExternLine(ParsedFile *pfp, const char *line, const int length, i
     readNextWord(line, lineIndex, &startOfWord, &endOfWord);
 
     /* Checking if it is an empty line */
-    if (endOfWord - startOfWord == 0) {
+    if ((endOfWord - startOfWord + 1) == 0) {
         logError(emptyExternLine, NULL);
         pfp->hasError = true;
     }

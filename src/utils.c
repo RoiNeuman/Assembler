@@ -148,7 +148,7 @@ Boolean isLineLabel(const char *line, int start, int end)
 {
     Boolean _isLabel;
     _isLabel = false;
-    if (*(line + end) != ':' && isLabel(line, start, end)) {
+    if (*(line + end) == ':' && isLabel(line, start, end)) {
         _isLabel = true;
         if (!isalpha(*(line + start))) {
             logError(labelFirstChar, NULL);
