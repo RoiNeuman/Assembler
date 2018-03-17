@@ -215,7 +215,8 @@ Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
     /* Adding the new struct properties */
     newInstruction->oc = op;
     newInstruction->instructionType = noOperands;
-    newInstruction->operand = NULL;
+    newInstruction->source = NULL;
+    newInstruction->destination = NULL;
     newInstruction->next = NULL;
 
     /* Adding the new instruction to the instructions list */
@@ -237,12 +238,32 @@ Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
     return false;
 }
 
-Boolean addSingleOperandInstruction(pfp, op, operand)
+/* Create new operand struct with initial values */
+Boolean createOperand(Operand **ppOperand, OperandType operandType, int iData, char *strData)
+{
+    /* Allocating memory for a new operand */
+    *ppOperand = (Operand *)autoDispMalloc(sizeof(Operand));
+
+    if (*ppOperand == NULL) {
+        logError(outOfMemory, NULL);
+        return true;
+    }
+
+    (*ppOperand)->type = operandType;
+    (*ppOperand)->iData = iData;
+    (*ppOperand)->strData = strData;
+
+    return false;
+}
+
+/* Add new instruction with only one operand to the instruction list */
+Boolean addSingleOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pDestination)
 {
 
 }
 
-Boolean addTwoOperandInstruction(pfp, op, sourceOperand, destinationOperand)
+/* Add new instruction with two operands to the instruction list */
+Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSourceOperand, Operand *pDestinationOperand)
 {
 
 }

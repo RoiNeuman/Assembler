@@ -20,8 +20,8 @@ lineAnalyzer.o: lineAnalyzer.c lineAnalyzer.h dataLine.h instructionLine.h parse
 dataLine.o: dataLine.c dataLine.h assembler.h utils.h parser.h errors.h
 	gcc -ansi -Wall -pedantic -c dataLine.c dataLine.h assembler.h utils.h parser.h errors.h
 
-instructionLine.o: instructionLine.c instructionLine.h assembler.h utils.h parser.h errors.h
-	gcc -ansi -Wall -pedantic -c instructionLine.c instructionLine.h assembler.h utils.h parser.h errors.h
+instructionLine.o: instructionLine.c instructionLine.h assembler.h utils.h memoryManager.h parser.h errors.h
+	gcc -ansi -Wall -pedantic -c instructionLine.c instructionLine.h assembler.h utils.h memoryManager.h parser.h errors.h
 
 fileHandler.o: fileHandler.c fileHandler.h utils.h errors.h
 	gcc -ansi -Wall -pedantic -c fileHandler.c fileHandler.h utils.h errors.h

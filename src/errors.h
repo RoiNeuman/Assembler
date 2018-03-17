@@ -21,7 +21,8 @@ typedef enum Error {
     missDestinationOperand,
     undefinedInstruction,
     undefinedSourceOperand,
-    undefinedDestinationOperand
+    undefinedDestinationOperand,
+    illegalImmediateAddressingOperand
 } Error;
 
 /* A node in the error list */

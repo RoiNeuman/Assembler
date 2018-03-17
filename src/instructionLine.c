@@ -1,16 +1,18 @@
+#include <ctype.h>
 #include "instructionLine.h"
+#include "memoryManager.h"
 #include "parser.h"
 #include "errors.h"
 
-Boolean analyzeSourceOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeDestinationOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeFourAddressTypeOperand(const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeThreeAddressTypeOperand(const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeTwoAddressTypeOperand(const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeImmediateAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeDirectAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeStructAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand);
-Boolean analyzeRegisterAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand);
+Boolean analyzeSourceOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeDestinationOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeFourAddressTypeOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeThreeAddressTypeOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeTwoAddressTypeOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeImmediateAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeDirectAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeStructAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
+Boolean analyzeRegisterAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand);
 
 /* Analyze two operands instruction line */
 Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int lineIndex, Opcode op, const char *name)
@@ -110,7 +112,7 @@ Boolean noOperandsInstruction(ParsedFile *pfp, Opcode op)
 }
 
 /* Analyze a source operand */
-Boolean analyzeSourceOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeSourceOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
 
@@ -122,10 +124,10 @@ Boolean analyzeSourceOperand(ParsedFile *pfp, Opcode op, const char *line, int s
         case cmp:
         case add:
         case sub:
-            hasError = analyzeFourAddressTypeOperand(line, startOfWord, endOfWord, operand);
+            hasError = analyzeFourAddressTypeOperand(pfp, line, startOfWord, endOfWord, ppOperand);
             break;
         case lea:
-            hasError = analyzeTwoAddressTypeOperand(line, startOfWord, endOfWord, operand);
+            hasError = analyzeTwoAddressTypeOperand(pfp, line, startOfWord, endOfWord, ppOperand);
             break;
         default:
             pfp->hasError = true;
@@ -135,7 +137,7 @@ Boolean analyzeSourceOperand(ParsedFile *pfp, Opcode op, const char *line, int s
 }
 
 /* Analyze a destination operand */
-Boolean analyzeDestinationOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeDestinationOperand(ParsedFile *pfp, Opcode op, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
 
@@ -155,11 +157,11 @@ Boolean analyzeDestinationOperand(ParsedFile *pfp, Opcode op, const char *line, 
         case bne:
         case red:
         case jsr:
-            hasError = analyzeThreeAddressTypeOperand(line, startOfWord, endOfWord, operand);
+            hasError = analyzeThreeAddressTypeOperand(pfp, line, startOfWord, endOfWord, ppOperand);
             break;
         case cmp:
         case prn:
-            hasError = analyzeFourAddressTypeOperand(line, startOfWord, endOfWord, operand);
+            hasError = analyzeFourAddressTypeOperand(pfp, line, startOfWord, endOfWord, ppOperand);
             break;
         default:
             pfp->hasError = true;
@@ -169,71 +171,103 @@ Boolean analyzeDestinationOperand(ParsedFile *pfp, Opcode op, const char *line, 
 }
 
 /* Analyze an instruction with four types of addressing */
-Boolean analyzeFourAddressTypeOperand(const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeFourAddressTypeOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand
+**ppOperand)
 {
     Boolean hasError;
 
-    hasError = analyzeImmediateAddressingOperand(line, startOfWord, endOfWord, operand);
+    hasError = analyzeImmediateAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
 
-    if (hasError == false && *operand == NULL) {
-        hasError = analyzeDirectAddressingOperand(line, startOfWord, endOfWord, operand);
+    if (hasError == false && *ppOperand == NULL) {
+        hasError = analyzeDirectAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
-    if (hasError == false && *operand == NULL) {
-        hasError = analyzeStructAddressingOperand(line, startOfWord, endOfWord, operand);
+    if (hasError == false && *ppOperand == NULL) {
+        hasError = analyzeStructAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
-    if (hasError == false && *operand == NULL) {
-        hasError = analyzeRegisterAddressingOperand(line, startOfWord, endOfWord, operand);
+    if (hasError == false && *ppOperand == NULL) {
+        hasError = analyzeRegisterAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
     return hasError;
 }
 
 /* Analyze an instruction with three types of addressing */
-Boolean analyzeThreeAddressTypeOperand(const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeThreeAddressTypeOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
 
-    hasError = analyzeDirectAddressingOperand(line, startOfWord, endOfWord, operand);
+    hasError = analyzeDirectAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
 
-    if (hasError == false && *operand == NULL) {
-        hasError = analyzeStructAddressingOperand(line, startOfWord, endOfWord, operand);
+    if (hasError == false && *ppOperand == NULL) {
+        hasError = analyzeStructAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
-    if (hasError == false && *operand == NULL) {
-        hasError = analyzeRegisterAddressingOperand(line, startOfWord, endOfWord, operand);
+    if (hasError == false && *ppOperand == NULL) {
+        hasError = analyzeRegisterAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
     return hasError;
 }
 
 /* Analyze an instruction with two types of addressing */
-Boolean analyzeTwoAddressTypeOperand(const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeTwoAddressTypeOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
 
-    hasError = analyzeDirectAddressingOperand(line, startOfWord, endOfWord, operand);
+    hasError = analyzeDirectAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
 
-    if (hasError == false && *operand == NULL) {
-        hasError = analyzeStructAddressingOperand(line, startOfWord, endOfWord, operand);
+    if (hasError == false && *ppOperand == NULL) {
+        hasError = analyzeStructAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
     return hasError;
 }
 
 /* Analyze an immediate addressing operand */
-Boolean analyzeImmediateAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeImmediateAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
+    int sign, c, index, number;
     Boolean hasError;
 
+    sign = 1;
+    number = 0;
     hasError = false;
+
+    if (*(line + startOfWord) == '#') {
+        if (endOfWord - startOfWord == 1) {
+            logError(illegalImmediateAddressingOperand, NULL);
+            pfp->hasError = true;
+            return false;
+        }
+        if ((c = *(line + startOfWord + 1)) == '+' || c == '-') {
+            /* Recording sign */
+            sign = (c == '-' ? -1 : 1);
+            index = startOfWord + 2;
+        } else {
+            index = startOfWord + 1;
+        }
+        while (index <= endOfWord) {
+            if (isdigit(c = *(line + index))) {
+                number = ((number * 10) + (c - '0'));
+            } else {
+                logError(illegalImmediateAddressingOperand, NULL);
+                pfp->hasError = true;
+                return false;
+            }
+            index++;
+        }
+
+        /* Creating the new operand */
+        hasError = createOperand(ppOperand, immediateAddressing, (number * sign), NULL);
+    }
 
     return hasError;
 }
 
 /* Analyze a direct addressing operand */
-Boolean analyzeDirectAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeDirectAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
 
@@ -243,7 +277,7 @@ Boolean analyzeDirectAddressingOperand(const char *line, int startOfWord, int en
 }
 
 /* Analyze a struct addressing operand */
-Boolean analyzeStructAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeStructAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
 
@@ -253,7 +287,7 @@ Boolean analyzeStructAddressingOperand(const char *line, int startOfWord, int en
 }
 
 /* Analyze a register addressing operand */
-Boolean analyzeRegisterAddressingOperand(const char *line, int startOfWord, int endOfWord, Operand **operand)
+Boolean analyzeRegisterAddressingOperand(ParsedFile *pfp, const char *line, int startOfWord, int endOfWord, Operand **ppOperand)
 {
     Boolean hasError;
 

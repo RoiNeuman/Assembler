@@ -34,7 +34,8 @@ typedef enum OperandType {
 /* An operand of instruction */
 typedef struct Operand {
     OperandType type; /* The type of the operand */
-    struct Operand *next; /* Next operand on the list */
+    int iData; /* The number part of the operand */
+    char *strData; /* The string part of the operand */
 } Operand;
 
 /* Types of instructions */
@@ -48,7 +49,8 @@ typedef enum InstructionType {
 typedef struct Instruction {
     Opcode oc; /* Opcode of the instruction */
     InstructionType instructionType; /* The instruction type */
-    Operand *operand; /* Operands with this instruction */
+    Operand *source; /* Source operands of this instruction */
+    Operand *destination; /* Destination operands with of instruction */
     struct Instruction *next; /* Next instruction on the list */
 } Instruction;
 
@@ -109,5 +111,14 @@ Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct);
 
 /* Add new no operands instruction to the instructions list */
 Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op);
+
+/* Create new operand struct with initial values */
+Boolean createOperand(Operand **ppOperand, OperandType operandType, int iData, char *strData);
+
+/* Add new instruction with only one operand to the instruction list */
+Boolean addSingleOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pDestination);
+
+/* Add new instruction with two operands to the instruction list */
+Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSourceOperand, Operand *pDestinationOperand);
 
 #endif

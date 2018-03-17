@@ -63,6 +63,9 @@ void printError(Error e, const char *msg)
         case undefinedDestinationOperand:
             fprintf(stderr, "Line %d, Error: Undefined destination operand in an instruction line.\n", line);
             break;
+        case illegalImmediateAddressingOperand:
+            fprintf(stderr, "Line %d, Error: Illegal immediate addressing operand in an instruction line.\n", line);
+            break;
         case none:
         default:
             break;
