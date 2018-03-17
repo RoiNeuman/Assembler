@@ -153,7 +153,7 @@ void logError(Error e, const char *msg)
 void initErrorLogger()
 {
     head = NULL;
-    line = -1;
+    line = 0;
 }
 
 /* Advance the logged line in the error logger */

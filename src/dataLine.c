@@ -22,13 +22,13 @@ Boolean analyzeDataLine(ParsedFile *pfp, const char *line, const int length, int
             data = (data * 10) + (c - '0');
             lineIndex++;
         }
-        if (lineIndex != length && c != EOF) {
+        if (lineIndex != length && c != EOF && isWhiteCharOrComma(c) == false) {
             logError(undefinedData, NULL);
             pfp->hasError = true;
             break;
         }
-        hasError = addData(pfp, (data * sign));
         lineIndex = clearWhiteCharOrComma(line, length, lineIndex);
+        hasError = addData(pfp, (data * sign));
     }
     return hasError;
 }
@@ -69,7 +69,7 @@ Boolean analyzeStructLine(ParsedFile *pfp, const char *line, const int length, i
                 data = (data * 10) + (c - '0');
                 lineIndex++;
             }
-            if (lineIndex != length && c != EOF) {
+            if (lineIndex != length && c != EOF && isWhiteCharOrComma(c) == false) {
                 logError(undefinedData, NULL);
                 pfp->hasError = true;
                 break;

@@ -29,7 +29,7 @@ Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int
     lineIndex = readNextWord(line, lineIndex, &startOfWord, &endOfWord);
 
     /* Checking for missing source operand */
-    if (endOfWord - startOfWord == 0) {
+    if (endOfWord - startOfWord + 1 == 0) {
         logError(missSourceOperand, name);
         pfp->hasError = true;
         return hasError;
@@ -48,7 +48,7 @@ Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int
         readNextWord(line, lineIndex, &startOfWord, &endOfWord);
 
         /* Checking for missing destination operand */
-        if (endOfWord - startOfWord == 0) {
+        if (endOfWord - startOfWord + 1 == 0) {
             logError(missDestinationOperand, name);
             pfp->hasError = true;
             return hasError;
@@ -85,7 +85,7 @@ Boolean singleOperandInstruction(ParsedFile *pfp, const char *line, int length, 
     readNextWord(line, lineIndex, &startOfWord, &endOfWord);
 
     /* Checking for missing operand */
-    if (endOfWord - startOfWord == 0) {
+    if (endOfWord - startOfWord + 1 == 0) {
         logError(missDestinationOperand, name);
         pfp->hasError = true;
         return hasError;
@@ -179,15 +179,15 @@ Boolean analyzeFourAddressTypeOperand(ParsedFile *pfp, const char *line, int sta
     hasError = analyzeImmediateAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
 
     if (hasError == false && *ppOperand == NULL) {
-        hasError = analyzeDirectAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
-    }
-
-    if (hasError == false && *ppOperand == NULL) {
         hasError = analyzeStructAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
     if (hasError == false && *ppOperand == NULL) {
         hasError = analyzeRegisterAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
+    }
+
+    if (hasError == false && *ppOperand == NULL) {
+        hasError = analyzeDirectAddressingOperand(pfp, line, startOfWord, endOfWord, ppOperand);
     }
 
     return hasError;

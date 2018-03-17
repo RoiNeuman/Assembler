@@ -37,7 +37,7 @@ void createResultFiles(ParsedFile *pfp)
     /* Writing first line */
     strcat(strObjectFile, mozarInstructionLength);
     strcat(strObjectFile, SPACE_STRING);
-    strcat(strObjectFile, mozarInstructionLength);
+    strcat(strObjectFile, mozarDataLength);
     strcat(strObjectFile, END_LINE_STRING);
 
     /* Running over the instruction list */
@@ -77,8 +77,8 @@ char *createObjectFileEmptyString(ParsedFile *pfp, int *objectFileLength, char *
 
     *mozarInstructionLength = binaryToMozar(decimalToBinary(pfp->IC));
     *mozarDataLength = binaryToMozar(decimalToBinary(pfp->DC));
-    iInstructionLength = strlen(*mozarInstructionLength) - TERMINATE_STRING_LENGTH;
-    iDataLength = strlen(*mozarDataLength) - TERMINATE_STRING_LENGTH;
+    iInstructionLength = strlen(*mozarInstructionLength);
+    iDataLength = strlen(*mozarDataLength);
     lineLength = (ADDRESS_IN_MOZAR_LENGTH + WORD_IN_MOZAR_LENGTH + SPACE_AND_END_LINE_LENGTH);
 
     /* Calculating the object file length in characters */
@@ -109,11 +109,15 @@ int writeInstruction(ParsedFile *pfp, char *strObjectFile, Instruction *instruct
         /* Write 2 registers operands */
         addressCounter = writeRegistersOperands(strObjectFile, instruction, addressCounter);
     } else {
-        /* Write the source operand */
-        addressCounter = writeOperand(pfp, strObjectFile, instruction, instruction->source, addressCounter, true);
+        if (instruction->instructionType == twoOperands) {
+            /* Write the source operand */
+            addressCounter = writeOperand(pfp, strObjectFile, instruction, instruction->source, addressCounter, true);
+        }
 
-        /* Write the destination operand */
-        addressCounter = writeOperand(pfp, strObjectFile, instruction, instruction->destination, addressCounter, false);
+        if (instruction->instructionType == twoOperands || instruction->instructionType == singleOperand) {
+            /* Write the destination operand */
+            addressCounter = writeOperand(pfp, strObjectFile, instruction, instruction->destination, addressCounter, false);
+        }
     }
 
     return addressCounter;

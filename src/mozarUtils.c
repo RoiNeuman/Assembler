@@ -8,14 +8,14 @@
 char *binaryToMozar(unsigned long number)
 {
     char *mozar;
-    int digitsCounter;
+    int digitsCounter, numberOfDigits;
     unsigned int digit;
     unsigned long temp;
 
     digitsCounter = 0;
     temp = number;
     while (temp != 0) {
-        temp = temp>>MOZAR_IN_BINARY_LENGTH;
+        temp = temp / 100000/*MOZAR_IN_BINARY_LENGTH*/;
         digitsCounter++;
     }
 
@@ -26,15 +26,16 @@ char *binaryToMozar(unsigned long number)
         return NULL;
     }
 
+    numberOfDigits = digitsCounter;
     while (digitsCounter != 0) {
         digitsCounter--;
         digit = number & DECIMAL_MOZAR_MAX;
-        number = number>>MOZAR_IN_BINARY_LENGTH;
-        *(mozar + digitsCounter) = decimalToMozar(binaryToUnsignedDecimal(digit));
+        number = number / MOZAR_IN_BINARY_LENGTH;
+        *(mozar + digitsCounter) = decimalToMozar(digit);
     }
 
     /* Adding terminating character */
-    *(mozar + digitsCounter) = '\0';
+    *(mozar + numberOfDigits) = '\0';
 
     return mozar;
 }
