@@ -1,8 +1,9 @@
 #include "parser.h"
 #include "memoryManager.h"
 #include "lineAnalyzer.h"
+#include "errors.h"
 
-static int _parseLine(ParsedFile *pfp, FILE *fp);
+int parseLine(ParsedFile *pfp, FILE *fp);
 
 /* Parse a given source file */
 ParsedFile *parseFile(FILE *fp, char *fName)
@@ -14,7 +15,7 @@ ParsedFile *parseFile(FILE *fp, char *fName)
     pfp = initializeParsedFile(fName);
 
     do { /* Parse all the file's lines */
-        lineLength = _parseLine(pfp, fp);
+        lineLength = parseLine(pfp, fp);
     } while (lineLength != READING_ERROR && lineLength != READING_EOF);
 
     if (lineLength == READING_ERROR) {
@@ -25,7 +26,7 @@ ParsedFile *parseFile(FILE *fp, char *fName)
 }
 
 /* Parse the next line from the given file */
-static int _parseLine(ParsedFile *pfp, FILE *fp)
+int parseLine(ParsedFile *pfp, FILE *fp)
 {
     int length;
     char *line;

@@ -146,10 +146,15 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
                 break;
         }
     } else {
-        newLabel->counter = LABEL_WITHOUT_DECLERATION;
+        newLabel->counter = LABEL_WITHOUT_DECLARATION;
     }
 
     /* Adding the new struct properties */
+    newLabel->name = substring(line, start, (end - start + 1));
+    if (newLabel->name == NULL) {
+        logError(outOfMemory, "Adding new label.");
+        return true;
+    }
     newLabel->hasEntry = (hasEntry ? hasEntry : newLabel->hasEntry);
     newLabel->hasExtern = (hasExtern ? hasExtern : newLabel->hasExtern);
     newLabel->next = NULL;

@@ -273,6 +273,7 @@ Boolean analyzeDirectAddressingOperand(ParsedFile *pfp, const char *line, int st
 
     hasError = false;
 
+
     return hasError;
 }
 

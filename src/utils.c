@@ -135,3 +135,27 @@ Boolean isGuidanceLine(const char *line, int start)
 {
     return *(line + start) == '.' ? true : false;
 }
+
+/* Return new string which is a part of the given string starting at the start index in the given length */
+/* Return NULL if out of memory */
+char *substring(const char *string, int start, int length)
+{
+    int i;
+    char *str;
+
+    /* Allocating length + 1 characters, extra 1 for the terminating character */
+    str = (char *)autoDispMalloc(sizeof(char) * (length + 1));
+
+    if (str == NULL) {
+        return NULL;
+    }
+
+    for (i = start; i < length && i < strlen(string); ++i) {
+        str[i - start] = string[i];
+    }
+
+    /* Adding the string terminating character */
+    str[length] = '\0';
+
+    return str;
+}

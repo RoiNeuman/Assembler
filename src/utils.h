@@ -8,7 +8,7 @@
 #define READING_EOF (-1)
 #define LABEL_START_POSITION 0
 #define LABEL_MAX_LENGTH 30
-#define LABEL_WITHOUT_DECLERATION -1
+#define LABEL_WITHOUT_DECLARATION (-1)
 
 /* Represent a boolean */
 typedef enum Boolean {
@@ -52,5 +52,9 @@ Boolean isLineLabel(const char *line, int start, int end);
 
 /* Checking whether the given line is a guidance line or instructive line */
 Boolean isGuidanceLine(const char *line, int start);
+
+/* Return new string which is a part of the given string starting at the start index in the given length */
+/* Return NULL if out of memory */
+char *substring(const char *string, int start, int length);
 
 #endif
