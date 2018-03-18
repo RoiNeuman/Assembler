@@ -14,14 +14,14 @@ void *autoDispMalloc(const size_t bytes)
     void **newBuffer = NULL;
 
     if (bufferSize <= bufferPosition) {
-        newBuffer = calloc(sizeof(void *), (size_t)(bufferSize + BUFFER_INCREMENTS_SIZE));
+        newBuffer = malloc(sizeof(void *) * (bufferSize + BUFFER_INCREMENTS_SIZE));
         if (newBuffer == NULL) return NULL;
 
         buffer = memcpy(newBuffer, buffer, (sizeof(void *) * bufferSize));
         bufferSize += BUFFER_INCREMENTS_SIZE;
     }
 
-    p = calloc(bytes, 1);
+    p = malloc(bytes);
     if (p == NULL) return NULL;
 
     buffer[bufferPosition++] = p;

@@ -165,10 +165,15 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
     }
     newLabel->hasEntry = (hasEntry ? hasEntry : newLabel->hasEntry);
     newLabel->hasExtern = (hasExtern ? hasExtern : newLabel->hasExtern);
+    newLabel->lines = NULL;
     newLabel->next = NULL;
 
     /* Adding the new label to the list */
+    label = pfp->lList;
     if (label != NULL) {
+        while (label->next != NULL) {
+            label = label->next;
+        }
         label->next = newLabel;
     } else {
         pfp->lList = newLabel;
@@ -182,11 +187,6 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
 Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct)
 {
     LineCounter *lc, *prev;
-
-    lc = label->lines;
-    while (lc != NULL) {
-        lc = lc->next;
-    }
 
     /* Allocating new line counter */
     lc = (LineCounter *)autoDispMalloc(sizeof(LineCounter));
@@ -210,10 +210,10 @@ Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct)
     lc->next = NULL;
 
     /* Adding the new line counter to the list */
-    if (label->lines == NULL) {
+    prev = label->lines;
+    if (prev == NULL) {
         label->lines = lc;
     } else {
-        prev = label->lines;
         while (prev->next != NULL) {
             prev = prev->next;
         }
