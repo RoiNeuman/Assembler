@@ -184,7 +184,7 @@ char *substring(const char *string, int start, int length)
         return NULL;
     }
 
-    for (i = start; i < length && i < strlen(string); ++i) {
+    for (i = start; i < start + length && i < strlen(string); ++i) {
         str[i - start] = string[i];
     }
 

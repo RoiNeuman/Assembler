@@ -94,41 +94,43 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
 {
     int i;
     Boolean existingLabel;
-    Label *newLabel, *prev;
+    Label *newLabel, *label;
 
-    prev = pfp->lList;
+    existingLabel = false;
+    label = pfp->lList;
     /* Checking new label or existing label */
-    if (pfp->lList != NULL) {
-        while (prev->next != NULL) {
+    if (label != NULL) {
+        while (label != NULL) {
             existingLabel = true;
-            for (i = 0; i < strlen(prev->name) && (i + start) <= end; ++i) {
-                if (*(prev->name + i) != *(line + (i + start))) {
+            for (i = 0; i < strlen(label->name) && (i + start) <= end; ++i) {
+                if (*(label->name + i) != *(line + (i + start))) {
                     existingLabel = false;
                     break;
                 }
             }
-            if (existingLabel) {
+            if (existingLabel == false && label->next != NULL) {
+                label = label->next;
+            } else {
                 break;
             }
-            prev = prev->next;
         }
-        if (prev->next != NULL) {
+        if (existingLabel) {
             /* Existing label */
-            prev->hasEntry = (hasEntry ? hasEntry : prev->hasEntry);
-            prev->hasExtern = (hasExtern ? hasExtern : prev->hasExtern);
+            label->hasEntry = (hasEntry ? hasEntry : label->hasEntry);
+            label->hasExtern = (hasExtern ? hasExtern : label->hasExtern);
             if (start == LABEL_START_POSITION) {
                 switch (ct) {
                     case IC:
-                        prev->counter = pfp->IC;
-                        prev->ct = IC;
+                        label->counter = pfp->IC;
+                        label->ct = IC;
                         break;
                     case DC:
-                        prev->counter = pfp->DC;
-                        prev->ct = DC;
+                        label->counter = pfp->DC;
+                        label->ct = DC;
                         break;
                 }
             }
-            return addLineCounter(pfp, prev, ct);
+            return addLineCounter(pfp, label, ct);
         }
     }
     /* New label */
@@ -166,8 +168,8 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
     newLabel->next = NULL;
 
     /* Adding the new label to the list */
-    if (prev != NULL) {
-        prev->next = newLabel;
+    if (label != NULL) {
+        label->next = newLabel;
     } else {
         pfp->lList = newLabel;
     }
@@ -179,7 +181,7 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
 /* Add new line counter to a label */
 Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct)
 {
-    LineCounter *lc;
+    LineCounter *lc, *prev;
 
     lc = label->lines;
     while (lc != NULL) {
@@ -204,6 +206,18 @@ Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct)
             lc->counter = pfp->DC;
             lc->ct = DC;
             break;
+    }
+    lc->next = NULL;
+
+    /* Adding the new line counter to the list */
+    if (label->lines == NULL) {
+        label->lines = lc;
+    } else {
+        prev = label->lines;
+        while (prev->next != NULL) {
+            prev = prev->next;
+        }
+        prev->next = lc;
     }
 
     /* No errors */
@@ -327,7 +341,7 @@ Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSource, O
 
     /* Adding the new struct properties */
     newInstruction->oc = op;
-    newInstruction->instructionType = singleOperand;
+    newInstruction->instructionType = twoOperands;
     newInstruction->source = pSource;
     newInstruction->destination = pDestination;
     newInstruction->line = line;
