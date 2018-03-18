@@ -169,7 +169,11 @@ addressCounter, Boolean isSource)
                 logError(labelNotFound, NULL);
                 return INSTRUCTION_ERROR;
             }
-            iWord = (labelAddress * OPERAND_MULTIPLIER) + labelType;
+            if (labelType == EXTERNAL) {
+                iWord = EXTERNAL;
+            } else {
+                iWord = (int)binaryToUnsignedDecimal((decimalToBinary(labelAddress)*100) + RELOCATABLE);
+            }
             break;
         case structAddressing:
             labelAddress = searchLabel(pfp, operand->strData, &labelType);
@@ -240,7 +244,7 @@ int searchLabel(ParsedFile *pfp, const char *name, int *labelType)
         return INSTRUCTION_ERROR;
     }
 
-    if (label->hasEntry) {
+    if (label->hasExtern) {
         *labelType = EXTERNAL;
         return 0;
     }
