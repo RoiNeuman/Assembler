@@ -90,7 +90,7 @@ Boolean addData(ParsedFile *pfp, int data)
 }
 
 /* Add label to the labels list */
-Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int end, CounterType ct, Boolean hasEntry, Boolean hasExtern)
+Boolean _addLabel(ParsedFile *pfp, const char *line, const int start, const int end, CounterType ct, Boolean hasEntry, Boolean hasExtern, const int lineCounter)
 {
     int i;
     Boolean existingLabel;
@@ -121,16 +121,20 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
             if (start == LABEL_START_POSITION) {
                 switch (ct) {
                     case IC:
-                        label->counter = pfp->IC;
+                        label->counter = (lineCounter != NOT_LINE_LABEL ? lineCounter : pfp->IC);
                         label->ct = IC;
                         break;
                     case DC:
-                        label->counter = pfp->DC;
+                        label->counter = (lineCounter != NOT_LINE_LABEL ? lineCounter : pfp->DC);
                         label->ct = DC;
                         break;
                 }
             }
-            return addLineCounter(pfp, label, ct);
+            if (hasEntry || hasExtern) {
+                /* No line count for entry or extern lines */
+                return false;
+            }
+            return addLineCounter(pfp, label, ct, lineCounter);
         }
     }
     /* New label */
@@ -145,16 +149,16 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
     if (start == LABEL_START_POSITION) {
         switch (ct) {
             case IC:
-                newLabel->counter = pfp->IC;
+                newLabel->counter = (lineCounter != NOT_LINE_LABEL ? lineCounter : pfp->IC);
                 newLabel->ct = IC;
                 break;
             case DC:
-                newLabel->counter = pfp->DC;
+                newLabel->counter = (lineCounter != NOT_LINE_LABEL ? lineCounter : pfp->DC);
                 newLabel->ct = DC;
                 break;
         }
     } else {
-        newLabel->counter = LABEL_WITHOUT_DECLARATION;
+        newLabel->counter = (lineCounter != NOT_LINE_LABEL ? lineCounter : LABEL_WITHOUT_DECLARATION);
     }
 
     /* Adding the new struct properties */
@@ -179,12 +183,26 @@ Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int e
         pfp->lList = newLabel;
     }
 
+    if (hasEntry || hasExtern) {
+        /* No line count for entry or extern lines */
+        return false;
+    }
     /* Marking this line for this label */
-    return addLineCounter(pfp, newLabel, ct);
+    return addLineCounter(pfp, newLabel, ct, lineCounter);
+}
+
+Boolean addLineLabel(ParsedFile *pfp, const char *line, const int start, const int end, CounterType ct, Boolean hasEntry, Boolean hasExtern, const int lineCounter)
+{
+    return _addLabel(pfp, line, start, end, ct, hasEntry, hasExtern, lineCounter);
+}
+
+Boolean addLabel(ParsedFile *pfp, const char *line, const int start, const int end, CounterType ct, Boolean hasEntry, Boolean hasExtern)
+{
+    return _addLabel(pfp, line, start, end, ct, hasEntry, hasExtern, NOT_LINE_LABEL);
 }
 
 /* Add new line counter to a label */
-Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct)
+Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct, const int lineCounter)
 {
     LineCounter *lc, *prev;
 
@@ -199,11 +217,11 @@ Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct)
     /* Adding the new line counter properties */
     switch (ct) {
         case IC:
-            lc->counter = pfp->IC;
+            lc->counter = (lineCounter != NOT_LINE_LABEL ? lineCounter : pfp->IC);
             lc->ct = IC;
             break;
         case DC:
-            lc->counter = pfp->DC;
+            lc->counter = (lineCounter != NOT_LINE_LABEL ? lineCounter : pfp->DC);
             lc->ct = DC;
             break;
     }
@@ -256,9 +274,6 @@ Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op)
         }
         prev->next = newInstruction;
     }
-
-    /* Incrementing the instructions counter */
-    pfp->IC = pfp->IC + IC_INSTRUCTION;
 
     /* No errors */
     return false;
@@ -315,13 +330,6 @@ Boolean addSingleOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pDestin
         prev->next = newInstruction;
     }
 
-    /* Incrementing the instructions counter */
-    if (pDestination->type == structAddressing) {
-        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND_STRUCT;
-    } else {
-        pfp->IC = pfp->IC + IC_OPERAND;
-    }
-
     /* No errors */
     return false;
 }
@@ -357,17 +365,6 @@ Boolean addTwoOperandInstruction(ParsedFile *pfp, Opcode op, Operand *pSource, O
             prev = prev->next;
         }
         prev->next = newInstruction;
-    }
-
-    /* Incrementing the instructions counter */
-    if (pSource->type == structAddressing && pDestination->type == structAddressing) {
-        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND_STRUCT + IC_OPERAND_STRUCT;
-    } else if (pSource->type == structAddressing || pDestination->type == structAddressing) {
-        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND + IC_OPERAND_STRUCT;
-    } else if (pSource->type == registerAddressing || pDestination->type == registerAddressing) {
-        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND;
-    } else {
-        pfp->IC = pfp->IC + IC_INSTRUCTION + IC_OPERAND + IC_OPERAND;
     }
 
     /* No errors */

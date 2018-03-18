@@ -93,6 +93,7 @@ Boolean analyzeStringLine(ParsedFile *pfp, const char *line, const int length, i
     hasError = false;
     lineIndex = clearWhiteCharacters(line, length, lineIndex);
     if (lineIndex != length && (c = *(line + lineIndex)) == '\"') {
+        lineIndex++;
         while (lineIndex != length && (c = *(line + lineIndex)) != '\"' && c != EOF && hasError == false) {
             hasError = addData(pfp, c);
             lineIndex++;

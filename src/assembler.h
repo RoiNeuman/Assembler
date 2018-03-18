@@ -5,7 +5,7 @@
 
 #define IC_INSTRUCTION 1
 #define IC_OPERAND 1
-#define IC_OPERAND_STRUCT 2
+#define NOT_LINE_LABEL -1
 
 /* Operation code */
 typedef enum Opcode {
@@ -109,11 +109,14 @@ ParsedFile *initializeParsedFile(char *fName);
 /* Add data to the data list */
 Boolean addData(ParsedFile *pfp, int data);
 
+/* Add line label to the labels list */
+Boolean addLineLabel(ParsedFile *pfp, const char *line, int start, int end, CounterType ct, Boolean hasEntry, Boolean hasExtern, int lineCounter);
+
 /* Add label to the labels list */
 Boolean addLabel(ParsedFile *pfp, const char *line, int start, int end, CounterType ct, Boolean hasEntry, Boolean hasExtern);
 
 /* Add new line counter to a label */
-Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct);
+Boolean addLineCounter(ParsedFile *pfp, Label *label, CounterType ct, int lineCounter);
 
 /* Add new no operands instruction to the instructions list */
 Boolean addNoOperandsInstruction(ParsedFile *pfp, Opcode op);

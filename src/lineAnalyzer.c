@@ -10,10 +10,12 @@ Boolean analyzeInstructionLine(ParsedFile *pfp, const char *line, int length, in
 /* Analyze the given line */
 Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
 {
-    int lineIndex, startOfWord, endOfWord, startOfLabel = 0, endOfLabel = 0;
+    int lineIndex, startOfWord, endOfWord, startOfLabel, endOfLabel, lineCounter;
     Boolean hasLabel, hasError;
     CounterType ct;
 
+    startOfLabel = 0;
+    endOfLabel = 0;
     lineIndex = clearWhiteCharacters(line, length, FIRST_INDEX);
 
     /* Skipping empty line */
@@ -40,16 +42,22 @@ Boolean analyzeLine(ParsedFile *pfp, const char *line, const int length)
     if (isGuidanceLine(line, startOfWord)) {
         /* Guidance line (data line) */
         ct = DC;
+        lineCounter = pfp->DC;
         hasError = analyzeGuidanceLine(pfp, line, length, lineIndex, startOfWord, &hasLabel);
     } else {
         /* Instruction line */
         ct = IC;
+        lineCounter = pfp->IC;
+
+        /* Incrementing the instructions counter */
+        pfp->IC = pfp->IC + IC_INSTRUCTION;
+
         hasError = analyzeInstructionLine(pfp, line, length, lineIndex, startOfWord);
     }
 
     /* Adding the label to the parsed file struct */
     if (hasError == false && hasLabel) {
-        hasError = addLabel(pfp, line, startOfLabel, endOfLabel, ct, false, false);
+        hasError = addLineLabel(pfp, line, startOfLabel, endOfLabel, ct, false, false, lineCounter);
     }
 
     return hasError;

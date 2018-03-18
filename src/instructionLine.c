@@ -65,6 +65,10 @@ Boolean twoOperandInstruction(ParsedFile *pfp, const char *line, int length, int
 
     /* Adding instruction */
     if (hasError == false && sourceOperand != NULL && destinationOperand != NULL) {
+        if (sourceOperand->type == registerAddressing && destinationOperand->type == registerAddressing) {
+            /* Two registers are adding on the same line */
+            pfp->IC = pfp->IC - IC_OPERAND;
+        }
         hasError = addTwoOperandInstruction(pfp, op, sourceOperand, destinationOperand);
     }
 
@@ -133,6 +137,7 @@ Boolean analyzeSourceOperand(ParsedFile *pfp, Opcode op, const char *line, int s
             pfp->hasError = true;
     }
 
+    pfp->IC = pfp->IC + IC_OPERAND;
     return hasError;
 }
 
@@ -167,6 +172,7 @@ Boolean analyzeDestinationOperand(ParsedFile *pfp, Opcode op, const char *line, 
             pfp->hasError = true;
     }
 
+    pfp->IC = pfp->IC + IC_OPERAND;
     return hasError;
 }
 
@@ -346,6 +352,7 @@ Boolean analyzeStructAddressingOperand(ParsedFile *pfp, const char *line, int st
         }
     }
 
+    pfp->IC = pfp->IC + IC_OPERAND;
     return hasError;
 }
 
