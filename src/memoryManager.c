@@ -21,7 +21,7 @@ void *autoDispMalloc(const size_t bytes)
         bufferSize += BUFFER_INCREMENTS_SIZE;
     }
 
-    p = malloc(bytes);
+    p = calloc(bytes, 1);
     if (p == NULL) return NULL;
 
     buffer[bufferPosition++] = p;
