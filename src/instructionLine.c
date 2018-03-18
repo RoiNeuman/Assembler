@@ -349,10 +349,10 @@ Boolean analyzeStructAddressingOperand(ParsedFile *pfp, const char *line, int st
 
         if (hasError == false) {
             hasError = createOperand(ppOperand, structAddressing, property, label);
+            pfp->IC = pfp->IC + IC_OPERAND;
         }
     }
 
-    pfp->IC = pfp->IC + IC_OPERAND;
     return hasError;
 }
 

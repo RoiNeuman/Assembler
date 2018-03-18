@@ -1,11 +1,10 @@
 #include "mozarUtils.h"
-#include "utils.h"
 #include "errors.h"
 #include "memoryManager.h"
 #include "resultFilesHandler.h"
 
 /* Convert binary number to mozar number */
-char *binaryToMozar(unsigned long number)
+char *binaryToMozar(unsigned long number, Boolean isTwo)
 {
     char *mozar;
     int digitsCounter, numberOfDigits;
@@ -15,23 +14,37 @@ char *binaryToMozar(unsigned long number)
     digitsCounter = 0;
     temp = number;
     while (temp != 0) {
-        temp = temp / 100000/*MOZAR_IN_BINARY_LENGTH*/;
+        temp = temp / MOZAR_IN_BINARY_LENGTH;
         digitsCounter++;
     }
 
-    mozar = (char *)autoDispMalloc(sizeof(char) * digitsCounter + TERMINATE_STRING_LENGTH);
+    numberOfDigits = digitsCounter;
+    if (isTwo && numberOfDigits < 2) {
+        numberOfDigits = 2;
+    } else if (isTwo) {
+        isTwo = false;
+    }
+
+    mozar = (char *)autoDispMalloc(sizeof(char) * numberOfDigits + TERMINATE_STRING_LENGTH);
 
     if (mozar == NULL) {
         logError(outOfMemory, "Binary to mozar.");
         return NULL;
     }
 
-    numberOfDigits = digitsCounter;
     while (digitsCounter != 0) {
         digitsCounter--;
-        digit = number & DECIMAL_MOZAR_MAX;
+        digit = binaryToUnsignedDecimal(number % MOZAR_IN_BINARY_LENGTH);
         number = number / MOZAR_IN_BINARY_LENGTH;
-        *(mozar + digitsCounter) = decimalToMozar(digit);
+        if (isTwo && digitsCounter < 2) {
+            *(mozar + 1) = decimalToMozar(digit);
+        } else {
+            *(mozar + digitsCounter) = decimalToMozar(digit);
+        }
+    }
+
+    if (isTwo) {
+        *mozar = decimalToMozar(0);
     }
 
     /* Adding terminating character */

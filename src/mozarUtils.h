@@ -39,8 +39,10 @@
 #define MOZAR_30 'u'
 #define MOZAR_31 'v'
 
+#include "utils.h"
+
 /* Convert binary number to mozar number */
-char *binaryToMozar(unsigned long number);
+char *binaryToMozar(unsigned long number, Boolean isTwo);
 
 /* Return a Mozar digit */
 char decimalToMozar(unsigned int number);

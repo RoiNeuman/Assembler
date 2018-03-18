@@ -72,11 +72,14 @@ void createResultFiles(ParsedFile *pfp)
 /* Initialize string in the length of the result object file */
 char *createObjectFileEmptyString(ParsedFile *pfp, int *objectFileLength, char **mozarInstructionLength, char **mozarDataLength)
 {
-    int iInstructionLength, iDataLength, lineLength;
+    int iInstructionLength, iDataLength, lineLength, _ic, _dc;
     char *strObjectFile;
 
-    *mozarInstructionLength = binaryToMozar(decimalToBinary(pfp->IC));
-    *mozarDataLength = binaryToMozar(decimalToBinary(pfp->DC));
+    _ic = (pfp->IC != 0 ? pfp->IC - IC_OPERAND : 0);
+    _dc = (pfp->DC != 0 ? pfp->DC - IC_OPERAND : 0);
+
+    *mozarInstructionLength = binaryToMozar(decimalToBinary(_ic), false);
+    *mozarDataLength = binaryToMozar(decimalToBinary(_dc), false);
     iInstructionLength = strlen(*mozarInstructionLength);
     iDataLength = strlen(*mozarDataLength);
     lineLength = (ADDRESS_IN_MOZAR_LENGTH + WORD_IN_MOZAR_LENGTH + SPACE_AND_END_LINE_LENGTH);
@@ -139,9 +142,9 @@ int writeInstructionWord(char *strObjectFile, Instruction *instruction, int addr
     }
 
     /* Writing instruction line */
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter), true));
     strcat(strObjectFile, SPACE_STRING);
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(iWord)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(iWord), true));
     strcat(strObjectFile, END_LINE_STRING);
 
     addressCounter++;
@@ -176,11 +179,11 @@ addressCounter, Boolean isSource)
                 return INSTRUCTION_ERROR;
             } else {
                 /* Writing struct name location line */
-                iWord = (labelAddress * OPERAND_MULTIPLIER) + labelType;
-                strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter)));
+                strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter), true));
                 strcat(strObjectFile, SPACE_STRING);
-                strcat(strObjectFile, binaryToMozar(decimalToBinary(iWord)));
+                strcat(strObjectFile, binaryToMozar((decimalToBinary(labelAddress)<<OPERAND_OFFSET) + labelType, true));
                 strcat(strObjectFile, END_LINE_STRING);
+                addressCounter++;
             }
             iWord = operand->iData * OPERAND_MULTIPLIER;
             break;
@@ -194,9 +197,9 @@ addressCounter, Boolean isSource)
     }
 
     /* Writing instruction line */
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter), true));
     strcat(strObjectFile, SPACE_STRING);
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(iWord)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(iWord), true));
     strcat(strObjectFile, END_LINE_STRING);
 
     addressCounter++;
@@ -212,9 +215,9 @@ int writeRegistersOperands(char *strObjectFile, Instruction *instruction, int ad
     iWord += instruction->destination->iData * OPERAND_MULTIPLIER;
 
     /* Writing instruction line */
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter), true));
     strcat(strObjectFile, SPACE_STRING);
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(iWord)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(iWord), true));
     strcat(strObjectFile, END_LINE_STRING);
 
     addressCounter++;
@@ -254,9 +257,9 @@ int searchLabel(ParsedFile *pfp, const char *name, int *labelType)
 int writeData(char *strObjectFile, Data *data, int addressCounter)
 {
     /* Writing data line */
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(addressCounter), true));
     strcat(strObjectFile, SPACE_STRING);
-    strcat(strObjectFile, binaryToMozar(decimalToBinary(data->value)));
+    strcat(strObjectFile, binaryToMozar(decimalToBinary(data->value), true));
     strcat(strObjectFile, END_LINE_STRING);
 
     addressCounter++;
@@ -292,7 +295,7 @@ void createEntryFile(ParsedFile *pfp)
             } else {
                 address = INITIAL_ADDRESS + pfp->IC + label->counter;
             }
-            strcat(strContentFile, binaryToMozar(decimalToBinary(address)));
+            strcat(strContentFile, binaryToMozar(decimalToBinary(address), true));
             strcat(strContentFile, END_LINE_STRING);
         }
         label = label->next;
@@ -342,9 +345,9 @@ void createExternFile(ParsedFile *pfp)
                 if (lc->ct == IC) {
                     address = INITIAL_ADDRESS + lc->counter;
                 } else {
-                    address = INITIAL_ADDRESS + pfp->IC + lc->counter;
+                    address = INITIAL_ADDRESS + pfp->IC - IC_OPERAND + lc->counter;
                 }
-                strcat(strContentFile, binaryToMozar(decimalToBinary(address)));
+                strcat(strContentFile, binaryToMozar(decimalToBinary(address), true));
                 strcat(strContentFile, END_LINE_STRING);
                 lc = lc->next;
             }

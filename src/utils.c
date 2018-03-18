@@ -62,7 +62,7 @@ unsigned int binaryToUnsignedDecimal(unsigned long number)
     i = 1;
 
     while (number != 0) {
-        decimal += ((number & 10) * i);
+        decimal += ((number % 10) * i);
         number /= 10;
         i *= 2;
     }
@@ -138,6 +138,9 @@ Boolean isLabel(const char *line, int start, int end)
     }
     if (end - start >= LABEL_MAX_LENGTH) {
         logError(labelMaxLength, NULL);
+        _isLabel = false;
+    }
+    if (end - start == 1 && *(line + start) == 'r' && '1' <= *(line + end) && *(line + end) <= '7') {
         _isLabel = false;
     }
     return _isLabel;
